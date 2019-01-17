@@ -52,8 +52,8 @@ Pos Minimax::minimax(Board *a, int depthx, bool player)
     if(!player && 0) min_value(a,alfa,beta,depthx);
     else max_value(a,alfa,beta,depthx);
 
-    printf("Numero de podas: %lld\n",podas);
-    printf("Nos expandidos: %lld\n", expandidos2);
+    //printf("Numero de podas: %lld\n",podas);
+    //printf("Nos expandidos: %lld\n", expandidos2);
     return a->best_play;
 }
 
