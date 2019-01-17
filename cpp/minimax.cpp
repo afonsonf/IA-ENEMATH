@@ -1,11 +1,14 @@
 #include "minimax.h"
 
+#include <time.h>
+#include <stdlib.h>
+
 long long expandidos2; //number of nodes expanded
 long long int podas;//number of prunes
 
+
 Pos Minimax::minimax(Board *a, int depthx, bool player)
 {
-
     //Check if there is a winning play
     Pos lp = a->last_play;
     Pos px;
@@ -23,7 +26,20 @@ Pos Minimax::minimax(Board *a, int depthx, bool player)
                 if (win)
                     return px;
             }
-           
+        }
+    }
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            px.i = i, px.j = j;
+            int erro_play = a->play(px);
+            if (!erro_play)
+            {
+                if((rand()%40)*1.0/40 < 0.4) a->best_play = px;
+                a->rmplay(lp);
+            }
         }
     }
     

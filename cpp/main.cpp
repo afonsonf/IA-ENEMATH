@@ -5,11 +5,14 @@
 #include "eval.h"
 #include "minimax.h"
 
+#include <time.h>
+
 void play(Board *board, bool player);
 void playbots(Board *board, bool player, int dif1, int dif2);
 
 int main()
 {
+    srand(time(NULL));
     Board *board = new Board();
     Eval::init_eval();
 
