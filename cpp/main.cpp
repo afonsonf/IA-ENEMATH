@@ -20,18 +20,20 @@ int main()
     //board->print_board();
 
     
-    //playbots(board, 0, 0, 0);
+    //playbots(board, 0, 3, 6);
     //play(board, 0);
 
+    //return 0;
+
     int s=0, x;
-    int dif1 = 0;
-    int dif2 = 0;
-    int n = 1000;
+    int dif1 =0;
+    int dif2 =1;
+    int n = 10000;
     int first = 1;
     for(int i=0;i<n;i++){
         board = new Board();
         if(playbotM(board, first, dif1, dif2)) s++;
-        //printf("%d %d\n",s,i-s);
+        printf("%d %d\n",s,i-s);
     }
 
     printf("number of games: %d\n",n);
