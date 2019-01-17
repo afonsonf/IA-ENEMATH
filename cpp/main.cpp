@@ -39,7 +39,7 @@ void play(Board *board, bool player){
         return;
     }
 
-    Pos p = Minimax::minimax(board, 7);
+    Pos p = Minimax::minimax(board, 8);
     board->play(p);
     printf("Bot played %d %d\n",p.i, p.j);
     printf("\n");
