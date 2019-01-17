@@ -16,7 +16,7 @@ int main()
     //board->print_board();
 
     
-    playbots(board, 1, 2, 8);
+    playbots(board, 0, 0, 9);
     //play(board, 0);
     return 0;
 }

@@ -1,4 +1,5 @@
 #include "eval.h"
+#include <math.h>
 
 int Eval::eval4[4][4][4][4];
 int Eval::eval3[4][4][4];
@@ -26,6 +27,6 @@ int Eval::eval_aux(int x1, int x2, int x3){
     int s = 0;
     s = k-x1 + k-x2 + k-x3;
 
-    if(s%2) return 400 - 50*s;
-    return -400 + 50*s;
+    if(s%2) return pow(40 - 5*s,2);
+    return -pow(-40 + 5*s,2);
 }

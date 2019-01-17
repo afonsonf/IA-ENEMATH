@@ -12,7 +12,7 @@ Board::Board(){
 	memset(board, 0, sizeof board);
     depth = 0;
     last_play.i = last_play.j = -1;
-    best_play.i = last_play.j = -1;
+    best_play.i = best_play.j = 0;
 }
 
 //play piece of player in column

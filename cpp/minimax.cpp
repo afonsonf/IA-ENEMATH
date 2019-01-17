@@ -32,7 +32,8 @@ Pos Minimax::minimax(Board *a, int depthx, bool player)
     int alfa = INT_MIN;
 	int beta = INT_MAX;
     
-    min_value(a,alfa,beta,depthx);
+    if(!player && 0) min_value(a,alfa,beta,depthx);
+    else max_value(a,alfa,beta,depthx);
 
     printf("Numero de podas: %lld\n",podas);
     printf("Nos expandidos: %lld\n", expandidos2);
@@ -50,7 +51,7 @@ int Minimax::max_value(Board *a, int alfa, int beta, int depth_max)
     bool k = a->final_board();
     if (k || a->depth >= depth_max)
     {
-        if(k) return -3000;
+        if(k) return -1000000;
         else  return -a->eval_board();
         
     }
@@ -113,7 +114,7 @@ int Minimax::min_value(Board *a, int alfa, int beta, int depth_max)
     bool k = a->final_board();
     if (k || a->depth >= depth_max)
     {
-        if(k) return 3000;
+        if(k) return 1000000;
         else  return a->eval_board();
         
     }
