@@ -3,7 +3,7 @@
 long long expandidos2; //number of nodes expanded
 long long int podas;//number of prunes
 
-Pos Minimax::minimax(Board *a, int depthx)
+Pos Minimax::minimax(Board *a, int depthx, bool player)
 {
 
     //Check if there is a winning play
@@ -31,8 +31,9 @@ Pos Minimax::minimax(Board *a, int depthx)
     podas = 0;
     int alfa = INT_MIN;
 	int beta = INT_MAX;
-
+    
     min_value(a,alfa,beta,depthx);
+
     printf("Numero de podas: %lld\n",podas);
     printf("Nos expandidos: %lld\n", expandidos2);
     return a->best_play;
@@ -45,11 +46,12 @@ int Minimax::max_value(Board *a, int alfa, int beta, int depth_max)
         opt = 1;
     if (a->depth == 1)
         opt = 2;
+    opt = 0;
     bool k = a->final_board();
     if (k || a->depth >= depth_max)
     {
         if(k) return -3000;
-        else  return a->eval_board();
+        else  return -a->eval_board();
         
     }
     int val = INT_MIN, x, kk;
@@ -107,6 +109,7 @@ int Minimax::min_value(Board *a, int alfa, int beta, int depth_max)
         opt = 1;
     if (a->depth == 1)
         opt = 2;
+    opt = 0;
     bool k = a->final_board();
     if (k || a->depth >= depth_max)
     {

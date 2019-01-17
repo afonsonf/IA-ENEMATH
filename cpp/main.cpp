@@ -6,43 +6,87 @@
 #include "minimax.h"
 
 void play(Board *board, bool player);
+void playbots(Board *board, bool player, int dif1, int dif2);
 
-int main(){
+int main()
+{
     Board *board = new Board();
     Eval::init_eval();
-    
+
     //board->print_board();
+
     
-    play(board, 1);
+    playbots(board, 1, 2, 8);
+    //play(board, 0);
     return 0;
 }
 
-void play(Board *board, bool player){
-    if(board->final_board()){
-        printf("%d %d\n",board->last_play.i,board->last_play.j);
-        board->print_board(); return;
+void play(Board *board, bool player)
+{
+    if (board->final_board())
+    {
+        printf("%d %d\n", board->last_play.i, board->last_play.j);
+        board->print_board();
+        return;
     }
 
-    if(player){
+    if (player)
+    {
         board->print_board();
         Pos p;
 
         printf("play:\n");
-        scanf("%d %d",&p.i, &p.j);
+        scanf("%d %d", &p.i, &p.j);
 
-        while(board->play(p)){
+        while (board->play(p))
+        {
             printf("invalid move!\n");
             printf("play:\n");
-            scanf("%d %d",&p.i, &p.j);
+            scanf("%d %d", &p.i, &p.j);
         }
-        play(board,!player);
+        play(board, !player);
         return;
     }
 
-    Pos p = Minimax::minimax(board, 8);
+    Pos p = Minimax::minimax(board, 2, player);
     board->play(p);
-    printf("Bot played %d %d\n",p.i, p.j);
+    printf("Bot played %d %d\n", p.i, p.j);
     printf("\n");
     play(board, !player);
+    return;
+}
+
+void playbots(Board *board, bool player, int dif1, int dif2)
+{
+    if (board->final_board())
+    {
+        printf("%d %d\n", board->last_play.i, board->last_play.j);
+        board->print_board();
+
+        if (!player)
+            printf("(true) bot with %d wins\n", dif1);
+        else
+            printf("(false) bot with %d wins\n", dif2);
+
+        return;
+    }
+
+    if (player)
+    {
+        Pos p = Minimax::minimax(board, dif1, player);
+        board->play(p);
+        printf("Bot with dif: %d played %d %d\n", dif1, p.i, p.j);
+        board->print_board();
+        printf("\n");
+        playbots(board, !player, dif1, dif2);
+        return;
+    }
+
+    Pos p = Minimax::minimax(board, dif2, player);
+    board->play(p);
+    printf("Bot with dif: %d played %d %d\n", dif2, p.i, p.j);
+    board->print_board();
+    printf("\n");
+    playbots(board, !player, dif1, dif2);
     return;
 }
