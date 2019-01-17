@@ -26,6 +26,6 @@ int Eval::eval_aux(int x1, int x2, int x3){
     int s = 0;
     s = k-x1 + k-x2 + k-x3;
 
-    if(s%2) return 45*s;
-    return -50*s;
+    if(s%2) return 400 - 50*s;
+    return -400 + 50*s;
 }
