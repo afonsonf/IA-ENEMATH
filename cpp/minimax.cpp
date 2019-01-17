@@ -17,6 +17,7 @@ Pos Minimax::minimax(Board *a, int depthx, bool player)
             int erro_play = a->play(px);
             if (!erro_play)
             {
+                a->best_play = px;
                 int win = a->final_board();
                 a->rmplay(lp);
                 if (win)
