@@ -21,9 +21,20 @@ int main()
 
     
     //playbots(board, 0, 3, 6);
-    //play(board, 0);
+    play(board, 0);
 
-    //return 0;
+    return 0;
+
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
+            board = new Board();
+            if(playbotM(board,1, i, j)) printf("1 ");
+            else printf("0 ");
+        }
+        printf("\n");
+    }
+
+    return 0;
 
     int s=0, x;
     int dif1 =0;
@@ -70,7 +81,7 @@ void play(Board *board, bool player)
         return;
     }
 
-    Pos p = Minimax::minimax(board, 2, player);
+    Pos p = Minimax::minimax(board, 9, player);
     board->play(p);
     printf("Bot played %d %d\n", p.i, p.j);
     printf("\n");

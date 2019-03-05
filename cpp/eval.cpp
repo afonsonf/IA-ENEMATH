@@ -17,16 +17,17 @@ void Eval::init_eval(){
     }
 }
 
-//win 3000
-//for each move 50
 int Eval::eval_aux(int x1, int x2, int x3){
     if(x1 == x2 && x2==x3 && x1 == 0) return 0;
-    if(x1 == x2 && x2==x3) return 3000;
+    if(x1 == x2 && x2==x3) return 1000000;
+    //return 0;
     int k = x1;
     if(k<x2) k = x2; if(k<x3) k = x3;
     int s = 0;
     s = k-x1 + k-x2 + k-x3;
 
-    if(s%2) return pow(40 - 5*s,2);
-    return -pow(-40 + 5*s,2);
+    if(s%2) return pow(30 - 5*s,2);
+    return -pow(30 - 5*s,2);
+    //if(s%2) return -300 + 50*s;
+    //return 300 - 50*s;
 }
