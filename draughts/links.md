@@ -15,3 +15,5 @@ http://www.cs.columbia.edu/~devans/TIC/AB.html
 
 
 Solving the Game of Checkers - http://library.msri.org/books/Book29/files/schaeffer.pdf
+
+http://tim.hibal.org/blog/playing-checkers-with-minimax/
