@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <utility>
+#include <vector>
+#include <list>
 
 #include "common.h"
 
@@ -16,12 +18,14 @@ public:
   bool last_up;
 
 	Pos best_play;
+	std::list<int> best_code;
+
 	int depth;
 
 	Board();
 
-	bool play(Pos p, int code);
-	bool rmplay(Pos last_p, int last_c);
+	Pos play(Pos p, int code);
+	Pos rmplay(Pos last_p, int last_c,bool last_u);
 
   bool inBounds(Pos p);
   bool open(Pos p);
@@ -30,8 +34,14 @@ public:
   bool canJump(Pos p);
   bool canStep(Pos p);
 
-  bool final_board();
-	int eval_board();
+	std::vector<Pos> getMovablePieces (bool player1);
+	int gameEnd();
+
+	std::vector<std::list<int> > getJumpMoves(Pos p);
+	std::vector<std::list<int> > getStepMoves(Pos p);
+	std::vector<std::list<int> > getMoves(Pos p);
+  //bool final_board();
+	//int eval_board();
 
 	void print_board();
 };

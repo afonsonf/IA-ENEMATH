@@ -58,7 +58,7 @@ public class BoardPosition {
             case(1): A ++;
                      B ++; break; //step right down
             case(2): //jump right up
-                     board[A-1][B+1] = 0;  
+                     board[A-1][B+1] = 0;
                      A -= 2;
                      B += 2; break;
             case(3): //jump right down

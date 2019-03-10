@@ -8,9 +8,8 @@ CFLAGS= -std=c++11
 # Source files
 SRC =               \
 	main.cpp	\
-  board.cpp \
-	eval.cpp  \
-	minimax.cpp \
+  board.cpp  \
+	minimax.cpp
 
 OBJ =  ${SRC:.cpp=.o}
 
