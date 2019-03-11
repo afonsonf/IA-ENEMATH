@@ -12,9 +12,11 @@
 class Board{
 public:
 	int board[8][8];
+	int numberPieces;
 
 	Pos last_play;
   int last_code;
+	int last_eat;
   bool last_up;
 
 	Pos best_play;
@@ -25,7 +27,7 @@ public:
 	Board();
 
 	Pos play(Pos p, int code);
-	Pos rmplay(Pos last_p, int last_c,bool last_u);
+	Pos rmplay(Pos last_p, int last_c, int last_e, bool last_u);
 
   bool inBounds(Pos p);
   bool open(Pos p);
@@ -35,13 +37,14 @@ public:
   bool canStep(Pos p);
 
 	std::vector<Pos> getMovablePieces (bool player1);
+	bool gameOver(bool player1);
 	int gameEnd();
 
 	std::vector<std::list<int> > getJumpMoves(Pos p);
 	std::vector<std::list<int> > getStepMoves(Pos p);
 	std::vector<std::list<int> > getMoves(Pos p);
   //bool final_board();
-	//int eval_board();
+	int eval_board();
 
 	void print_board();
 };

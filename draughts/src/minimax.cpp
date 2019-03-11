@@ -31,14 +31,14 @@ Pos Minimax::minimax(Board *board, int depthx, bool player1)
 
 int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
 {
-
+  // printf("call max\n");
+  // board->print_board();
   int k = board->gameEnd();
   if (k || board->depth >= depth_max)
   {
     if(k==-1) return -1000000;
     if(k==1) return 1000000;
-    return 0;
-    //return board->eval();
+    return board->eval_board();
   }
 
   int val = INT_MIN, valx;
@@ -46,6 +46,7 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
 
   std::stack<Pos> lplay;
   std::stack<int> lcode;
+  std::stack<int> leat;
   std::stack<bool> lup;
 
   std::vector<Pos> pieces = board->getMovablePieces(true);
@@ -54,24 +55,37 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
 
   for(Pos p : pieces){ if(podar) break;
     moves = board->getMoves(p);
-    px = p;
     for(std::list<int> codes: moves){ if(podar) break;
+      px = p;
+
+      // printf("before max\n");
+      // board->print_board();
+
       //play
       for(auto it = codes.begin(); it!=codes.end(); it++){
-        lplay.push(board->last_play); lcode.push(board->last_code); lup.push(board->last_up);
+        lplay.push(board->last_play); lcode.push(board->last_code); leat.push(board->last_eat); lup.push(board->last_up);
         px = board->play(px,*it);
       }
+
+      // printf("after max\n");
+      // board->print_board();
 
       //call min
       board->depth++;
       valx = min_value(board, alfa, beta, depth_max);
       board->depth--;
 
+      // printf("before rem max\n");
+      // board->print_board();
+
       //rmplay
       while(!lplay.empty()){
-        board->rmplay(lplay.top(), lcode.top(), lup.top());
-        lplay.pop(); lcode.pop(); lup.pop();
+        board->rmplay(lplay.top(), lcode.top(), leat.top(), lup.top());
+        lplay.pop(); lcode.pop(); leat.pop(); lup.pop();
       }
+
+      // printf("after rem max\n");
+      // board->print_board();
 
       //process valx
       if (val < valx)
@@ -96,47 +110,62 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
 
 int Minimax::min_value(Board *board, int alfa, int beta, int depth_max)
 {
+  // printf("call min\n");
+  // board->print_board();
+
   int k = board->gameEnd();
   if (k || board->depth >= depth_max)
   {
     if(k==-1) return -1000000;
     if(k==1) return 1000000;
-    return 0;
-    //return board->eval();
+    return board->eval_board();
   }
   int val = INT_MAX, valx;
   int podar = 0;
 
   std::stack<Pos> lplay;
   std::stack<int> lcode;
+  std::stack<int> leat;
   std::stack<bool> lup;
 
-  std::vector<Pos> pieces = board->getMovablePieces(true);
+  std::vector<Pos> pieces = board->getMovablePieces(false);
   std::vector<std::list<int> > moves;
   Pos px;
 
   for(Pos p : pieces){ if(podar) break;
 
     moves = board->getMoves(p);
-    px = p;
     for(std::list<int> codes: moves){ if(podar) break;
+      px = p;
+
+      // printf("before min\n");
+      // board->print_board();
 
       //play
       for(auto it = codes.begin(); it!=codes.end(); it++){
-        lplay.push(board->last_play); lcode.push(board->last_code); lup.push(board->last_up);
+        lplay.push(board->last_play); lcode.push(board->last_code); leat.push(board->last_eat); lup.push(board->last_up);
         px = board->play(px,*it);
       }
+
+      // printf("after min\n");
+      // board->print_board();
 
       //call min
       board->depth++;
       valx = max_value(board, alfa, beta, depth_max);
       board->depth--;
 
+      // printf("before rem min\n");
+      // board->print_board();
+
       //rmplay
       while(!lplay.empty()){
-        board->rmplay(lplay.top(), lcode.top(), lup.top());
-        lplay.pop(); lcode.pop(); lup.pop();
+        board->rmplay(lplay.top(), lcode.top(), leat.top(), lup.top());
+        lplay.pop(); lcode.pop(); leat.pop(); lup.pop();
       }
+
+      // printf("after rem min\n");
+      // board->print_board();
 
       //process valx
       if (val > valx)
