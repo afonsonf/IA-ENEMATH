@@ -9,7 +9,7 @@ int main(){
   bool player1;
   Pos p;
 
-  int k=50,w=0,d=0,l=0,plays;
+  int k=100,w=0,d=0,l=0,plays;
   while(k--){
     board = new Board();
     player1 = true;
@@ -19,23 +19,23 @@ int main(){
     while(1){
       if(board->gameOver(player1)){
         if(player1){
-          //printf("B wins\n");
+          printf("B wins\n");
           l++;
         }
         else{
-          //printf("R wins\n");
+          printf("R wins\n");
           w++;
         }
         break;
       }
       if(plays>80){
-        d++; break;
+        printf("draw\n");d++; break;
       }
 
       if(player1)
       Minimax::minimax(board, 4, player1);
       else
-      Minimax::minimax(board, 8, player1);
+      Minimax::minimax(board, 4, player1);
 
       //if(player1) printf("R plays\n");
       //else        printf("B plays\n");
