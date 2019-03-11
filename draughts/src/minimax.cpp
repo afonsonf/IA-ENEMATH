@@ -8,6 +8,8 @@ long long int podas;//number of prunes
 
 Pos Minimax::minimax(Board *board, int depthx, bool player1)
 {
+  srand(time(NULL));
+
   board->best_play = board->getMovablePieces(player1).front();
   board->best_code = board->getMoves(board->best_play)[0];
 
@@ -33,6 +35,7 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
 {
   // printf("call max\n");
   // board->print_board();
+
   int k = board->gameEnd();
   if (k || board->depth >= depth_max)
   {
@@ -52,6 +55,9 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
   std::vector<Pos> pieces = board->getMovablePieces(true);
   std::vector<std::list<int> > moves;
   Pos px;
+
+  int times = rand() % 20 +1;
+  while(times){ std:next_permutation(pieces.begin(), pieces.end()); times--;};
 
   for(Pos p : pieces){ if(podar) break;
     moves = board->getMoves(p);
@@ -90,7 +96,7 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
       //process valx
       if (val < valx)
       {
-        if (board->depth == 1){
+        if (board->depth == 0){
           board->best_play = p;
           board->best_code = codes;
         }
@@ -132,6 +138,9 @@ int Minimax::min_value(Board *board, int alfa, int beta, int depth_max)
   std::vector<std::list<int> > moves;
   Pos px;
 
+  int times = rand() % 20 +1;
+  while(times){ std:next_permutation(pieces.begin(), pieces.end()); times--;};
+
   for(Pos p : pieces){ if(podar) break;
 
     moves = board->getMoves(p);
@@ -170,7 +179,7 @@ int Minimax::min_value(Board *board, int alfa, int beta, int depth_max)
       //process valx
       if (val > valx)
       {
-        if (board->depth == 1){
+        if (board->depth == 0){
           board->best_play = p;
           board->best_code = codes;
         }
@@ -181,7 +190,7 @@ int Minimax::min_value(Board *board, int alfa, int beta, int depth_max)
         podar=1;
       }
 
-      beta = std::min (alfa,val);
+      beta = std::min (beta,val);
     }
   }
 

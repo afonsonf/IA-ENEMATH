@@ -26,6 +26,7 @@ public:
 
 	Board();
 
+	bool validMove(Pos p, int code);
 	Pos play(Pos p, int code);
 	Pos rmplay(Pos last_p, int last_c, int last_e, bool last_u);
 

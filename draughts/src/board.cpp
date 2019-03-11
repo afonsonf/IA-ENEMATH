@@ -1,13 +1,37 @@
 #include "board.h"
 
-int values[8][8] =  {{1, 1, 1, 2, 2, 3, 3, 4},
-                     {1, 1, 1, 2, 2, 3, 3, 4},
-                     {1, 1, 1, 2, 2, 3, 3, 4},
-                     {1, 1, 1, 2, 2, 3, 3, 4},
-                     {1, 1, 1, 2, 2, 3, 3, 4},
-                     {1, 1, 1, 2, 2, 3, 3, 4},
-                     {1, 1, 1, 2, 2, 3, 3, 4},
-                     {1, 1, 1, 2, 2, 3, 3, 4}};
+int values[8][8] = {
+  {1, 1, 1, 4, 4, 6, 6, 8},
+  {1, 1, 1, 4, 4, 6, 6, 8},
+  {1, 1, 1, 4, 4, 6, 6, 8},
+  {1, 1, 1, 4, 4, 6, 6, 8},
+  {1, 1, 1, 4, 4, 6, 6, 8},
+  {1, 1, 1, 4, 4, 6, 6, 8},
+  {1, 1, 1, 4, 4, 6, 6, 8},
+  {1, 1, 1, 4, 4, 6, 6, 8}
+};
+
+int valuestry[8][8] = {
+  {1, 1, 1, 1, 3, 3, 3, 3},
+  {1, 1, 1, 1, 3, 3, 3, 3},
+  {1, 1, 1, 1, 3, 3, 3, 3},
+  {1, 1, 1, 1, 3, 3, 3, 3},
+  {1, 1, 1, 1, 3, 3, 3, 3},
+  {1, 1, 1, 1, 3, 3, 3, 3},
+  {1, 1, 1, 1, 3, 3, 3, 3},
+  {1, 1, 1, 1, 3, 3, 3, 3}
+};
+
+int valuesKing[8][8] = {
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 3, 3, 3, 3, 1, 1},
+  {1, 1, 3, 4, 4, 3, 1, 1},
+  {1, 1, 3, 4, 4, 3, 1, 1},
+  {1, 1, 3, 3, 3, 3, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1}
+};
 
 //constructor
 Board::Board(){
@@ -34,18 +58,48 @@ Board::Board(){
   //best_play.i = best_play.j = 0;
 }
 
+bool Board::validMove(Pos p, int code){
+  if(!inBounds(p)){
+    printf("Error: pos not in bounds (%d,%d)\n",p.i,p.j); return false;
+  }
+  if(open(p)){
+    printf("Error: no piece in pos (%d,%d)\n",p.i,p.j); return false;
+  }
+
+  if(code == 0 && !open(mk_Pos(p.i-1,p.j+1))){
+    printf("Error: try step right up, pos not open (%d,%d)\n",p.i,p.j); return false;
+  }
+  if(code == 1 && !open(mk_Pos(p.i+1,p.j+1))){
+    printf("Error: try step right down, pos not open (%d,%d)\n",p.i,p.j); return false;
+  }
+  if(code == 4 && !open(mk_Pos(p.i-1,p.j-1))){
+    printf("Error: try step left up, pos not open (%d,%d)\n",p.i,p.j); return false;
+  }
+  if(code == 5 && !open(mk_Pos(p.i+1,p.j-1))){
+    printf("Error: try step left down, pos not open (%d,%d)\n",p.i,p.j); return false;
+  }
+
+  if(code == 2 && !jumpOK(p,mk_Pos(p.i-1,p.j+1))){
+    printf("Error: try jump right up, jump not ok (%d,%d)\n",p.i,p.j); return false;
+  }
+  if(code == 3 && !jumpOK(p,mk_Pos(p.i+1,p.j+1))){
+    printf("Error: try jump right down, jump not ok (%d,%d)\n",p.i,p.j); return false;
+  }
+  if(code == 6 && !jumpOK(p,mk_Pos(p.i-1,p.j-1))){
+    printf("Error: try jump left up, jump not ok (%d,%d)\n",p.i,p.j); return false;
+  }
+  if(code == 7 && !jumpOK(p,mk_Pos(p.i+1,p.j-1))){
+    printf("Error: try jump left down, jump not ok (%d,%d)\n",p.i,p.j); return false;
+  }
+  return true;
+}
+
 //play piece of player in column
 Pos Board::play(Pos p, int code){
   //[TODO] test if valid move
-  if(!inBounds(p)){
-    print_board();
-    printf("Error pos: not in bounds (%d,%d)\n",p.i,p.j); exit(1);
+  if(!validMove(p,code)){
+    print_board(); exit(1);
   }
-  if(open(p)){
-    print_board();
-    printf("Error pos: no piece (%d,%d)\n",p.i,p.j); exit(1);
-  }
-
 
   int value = board[p.i][p.j];
   board[p.i][p.j] = 0;
@@ -59,6 +113,7 @@ Pos Board::play(Pos p, int code){
       break;
     }
     case(2):{ //jump right up
+
       last_eat = board[p.i-1][p.j+1];
       board[p.i-1][p.j+1] = 0;
       p.i -= 2; p.j += 2;
@@ -384,13 +439,13 @@ int Board::eval_board(){
   for(int i=0;i<8;i++){
     for(int j=0; j<8;j++){
       if(std::abs(board[i][j]) == valueOfKing)
-        value += 0 * board[i][j];
+        value += valuesKing[i][j] * board[i][j];
       else if(sign(board[i][j]) > 0){
-        value += values[i][j] * board[i][j];
+        value += valuestry[i][j] * board[i][j];
         //printf("(%d,%d) val+ %d %d\n",i,j,values[i][j],board[i][j]);
       }
       else if(sign(board[i][j]) < 0){
-        value += values[i][7-j] * board[i][j];
+        value += valuestry[i][7-j] * board[i][j];
         //printf("(%d,%d) val- %d %d\n",i,j,values[i][7-j],board[i][j]);
       }
     }
@@ -408,21 +463,17 @@ void Board::print_board(){
     printf("| ");
     for(int j=0;j<8;j++){
       switch(board[i][j]){
-        case -valueOfKing:
-        printf("B "); break;
-        case -1:
-        printf("b "); break;
-        case 0:
-        printf("_ "); break;
-        case 1:
-        printf("a "); break;
-        case valueOfKing:
-        printf("A "); break;
+        case -valueOfKing:{printf("B "); break;}
+        case -1:{printf("b "); break;}
+        case  0:{printf("_ "); break;}
+        case  1:{printf("r "); break;}
+        case valueOfKing:{printf("R "); break;}
+
         default:
         printf("Error board: (%d,%d) %d\n",i,j,board[i][j]); exit(1);
       }
     }
     printf(" |\n");
   }
-  printf("|-"); for(int i=0;i<8;i++)printf("--"); printf("-|\n");
+  printf("|-"); for(int i=0;i<8;i++)printf("--"); printf("-|\n\n");
 }

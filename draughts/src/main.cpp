@@ -4,31 +4,56 @@
 #include "minimax.h"
 
 int main(){
-  Board *board = new Board();
+  Board *board;
 
-  bool player1 = true;
+  bool player1;
   Pos p;
 
-  board->print_board();
-  while(1){
-    if(board->gameOver(player1)){
-      if(player1) printf("B wins\n");
-      else printf("A wins\n");
-      break;
+  int k=50,w=0,d=0,l=0,plays;
+  while(k--){
+    board = new Board();
+    player1 = true;
+    plays=0;
+
+    //board->print_board();
+    while(1){
+      if(board->gameOver(player1)){
+        if(player1){
+          //printf("B wins\n");
+          l++;
+        }
+        else{
+          //printf("R wins\n");
+          w++;
+        }
+        break;
+      }
+      if(plays>80){
+        d++; break;
+      }
+
+      if(player1)
+      Minimax::minimax(board, 4, player1);
+      else
+      Minimax::minimax(board, 8, player1);
+
+      //if(player1) printf("R plays\n");
+      //else        printf("B plays\n");
+
+      p = board->best_play;
+      for(auto it = board->best_code.begin();it!=board->best_code.end(); it++){
+        //printf("(%d %d) %d\n",p.i,p.j,*it);
+        p=board->play(p, *it);
+      }
+
+      //board->print_board();
+
+      player1 = !player1;
+      plays++;
     }
-    if(player1)
-      Minimax::minimax(board, 3, player1);
-    else
-      Minimax::minimax(board, 9, player1);
-    p = board->best_play;
-    for(auto it = board->best_code.begin();it!=board->best_code.end(); it++)
-      p=board->play(p, *it);
-
-    board->print_board();
-
-    player1 = !player1;
   }
 
+  printf("w: %d\nd: %d\nl: %d\n",w,d,l);
 
   return 0;
 }

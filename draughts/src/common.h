@@ -8,6 +8,12 @@
 struct Pos{
   int i;
   int j;
+
+  int operator< (Pos b){
+    if(i==b.i) return j<b.j;
+    return i<b.i;
+  }
+
 };
 
 static Pos mk_Pos(int i, int j){
