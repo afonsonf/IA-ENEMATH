@@ -33,7 +33,7 @@ int main(){
       }
 
       if(player1)
-      Minimax::minimax(board, 4, player1);
+      Minimax::minimax(board, 7, player1);
       else
       Minimax::minimax(board, 4, player1);
 

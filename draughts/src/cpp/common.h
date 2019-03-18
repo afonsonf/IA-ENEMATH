@@ -22,6 +22,13 @@ static Pos mk_Pos(int i, int j){
   return p;
 }
 
+struct Move{
+  Pos last_pos;
+  int last_code;
+  int last_eat;
+  bool last_up;
+};
+
 static int sign(int val) {
   if (val > 0) return 1;
   if (val < 0) return -1;

@@ -1,17 +1,31 @@
 #include "board.h"
 
-int values[8][8] = {
-  {1, 1, 1, 4, 4, 6, 6, 8},
-  {1, 1, 1, 4, 4, 6, 6, 8},
-  {1, 1, 1, 4, 4, 6, 6, 8},
-  {1, 1, 1, 4, 4, 6, 6, 8},
-  {1, 1, 1, 4, 4, 6, 6, 8},
-  {1, 1, 1, 4, 4, 6, 6, 8},
-  {1, 1, 1, 4, 4, 6, 6, 8},
-  {1, 1, 1, 4, 4, 6, 6, 8}
+//values growing [NOTE change eval function to use]
+int valuest[8][8] = {
+  {1, 1, 1, 3, 3, 5, 5, 6},
+  {1, 1, 1, 3, 3, 5, 5, 6},
+  {1, 1, 1, 3, 3, 5, 5, 6},
+  {1, 1, 1, 3, 3, 5, 5, 6},
+  {1, 1, 1, 3, 3, 5, 5, 6},
+  {1, 1, 1, 3, 3, 5, 5, 6},
+  {1, 1, 1, 3, 3, 5, 5, 6},
+  {1, 1, 1, 3, 3, 5, 5, 6}
 };
 
-int valuestry[8][8] = {
+//copied from example
+int values[8][8] = {
+  {4, 4, 4, 4, 4, 4, 4, 4},
+  {4, 3, 3, 3, 3, 3, 3, 3},
+  {4, 3, 2, 2, 2, 2, 2, 2},
+  {4, 3, 2, 1, 1, 2, 3, 4},
+  {4, 3, 2, 1, 1, 2, 3, 4},
+  {4, 3, 2, 2, 2, 2, 2, 2},
+  {4, 3, 3, 3, 3, 3, 3, 3},
+  {4, 4, 4, 4, 4, 4, 4, 4}
+};
+
+//two values [NOTE change eval function to use]
+int valuesm[8][8] = {
   {1, 1, 1, 1, 3, 3, 3, 3},
   {1, 1, 1, 1, 3, 3, 3, 3},
   {1, 1, 1, 1, 3, 3, 3, 3},
@@ -22,6 +36,7 @@ int valuestry[8][8] = {
   {1, 1, 1, 1, 3, 3, 3, 3}
 };
 
+//to prevent kings loop in the edges
 int valuesKing[8][8] = {
   {1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 1, 1, 1, 1, 1, 1},
@@ -54,8 +69,6 @@ Board::Board(){
   }
 
   depth = 0;
-  //last_play.i = last_play.j = -1;
-  //best_play.i = best_play.j = 0;
 }
 
 bool Board::validMove(Pos p, int code){
@@ -96,10 +109,11 @@ bool Board::validMove(Pos p, int code){
 
 //play piece of player in column
 Pos Board::play(Pos p, int code){
-  //[TODO] test if valid move
   if(!validMove(p,code)){
     print_board(); exit(1);
   }
+
+  Move mv;
 
   int value = board[p.i][p.j];
   board[p.i][p.j] = 0;
@@ -114,14 +128,14 @@ Pos Board::play(Pos p, int code){
     }
     case(2):{ //jump right up
 
-      last_eat = board[p.i-1][p.j+1];
+      mv.last_eat = board[p.i-1][p.j+1];
       board[p.i-1][p.j+1] = 0;
       p.i -= 2; p.j += 2;
       numberPieces--;
       break;
     }
     case(3):{ //jump right down
-      last_eat = board[p.i+1][p.j+1];
+      mv.last_eat = board[p.i+1][p.j+1];
       board[p.i+1][p.j+1] = 0;
       p.i += 2; p.j += 2;
       numberPieces--;
@@ -136,7 +150,7 @@ Pos Board::play(Pos p, int code){
       break;
     }
     case(6):{ //jump left up
-      last_eat = board[p.i-1][p.j-1];
+      mv.last_eat = board[p.i-1][p.j-1];
       board[p.i-1][p.j-1] = 0;
       p.i -= 2; p.j -= 2;
       numberPieces--;
@@ -144,7 +158,7 @@ Pos Board::play(Pos p, int code){
     }
 
     case(7):{ //jump left down
-      last_eat = board[p.i+1][p.j-1];
+      mv.last_eat = board[p.i+1][p.j-1];
       board[p.i+1][p.j-1] = 0;
       p.i += 2; p.j -= 2;
       numberPieces--;
@@ -156,82 +170,76 @@ Pos Board::play(Pos p, int code){
   board[p.i][p.j] = value;
   if((p.j == 0 && value == -1) || (p.j == 7 && value == 1)){  //king it
     board[p.i][p.j] *= valueOfKing;
-    last_up = true;
+    mv.last_up = true;
   }
-  else last_up = false;
+  else mv.last_up = false;
 
-  last_play = p;
-  last_code = code;
+  mv.last_pos = p;
+  mv.last_code = code;
+
+  movesStack.push(mv);
 
   return p;
 }
 
 //undo last play
-Pos Board::rmplay(Pos last_p, int last_c, int last_e, bool last_u){
-  //[TODO] test if removable
+void Board::rmplay(){
 
-  Pos p = last_play;
-  int code = last_code;
-  int eat = last_eat;
-  bool up = last_up;
+  Move mv = movesStack.top();
+  movesStack.pop();
 
-  last_play = last_p;
-  last_code = last_c;
-  last_eat = last_e;
-  last_up = last_u;
+  int value = board[mv.last_pos.i][mv.last_pos.j];
+  board[mv.last_pos.i][mv.last_pos.j] = 0;
 
-  int value = board[p.i][p.j];
-  board[p.i][p.j] = 0;
+  if(mv.last_up) value /= valueOfKing;
 
-  if(up) value /= valueOfKing;
-
-  switch(code){
+  switch(mv.last_code){
     case(0):{ //step right up
-      p.i ++; p.j --;
+      mv.last_pos.i ++; mv.last_pos.j --;
       break;
     }
     case(1):{ //step right down
-      p.i --; p.j --;
+      mv.last_pos.i --; mv.last_pos.j --;
       break;
     }
     case(2):{ //jump right up
-      p.i += 2; p.j -= 2;
-      board[p.i-1][p.j+1] = eat;
+      mv.last_pos.i += 2; mv.last_pos.j -= 2;
+      board[mv.last_pos.i-1][mv.last_pos.j+1] = mv.last_eat;
       numberPieces++;
       break;
     }
     case(3):{ //jump right down
-      p.i -= 2; p.j -= 2;
-      board[p.i+1][p.j+1] = eat;
+      mv.last_pos.i -= 2; mv.last_pos.j -= 2;
+      board[mv.last_pos.i+1][mv.last_pos.j+1] = mv.last_eat;
       numberPieces++;
       break;
     }
     case(4):{ //step left up
-      p.i ++; p.j ++;
+      mv.last_pos.i ++; mv.last_pos.j ++;
       break;
     }
     case(5):{ //step left down
-      p.i --; p.j ++;
+      mv.last_pos.i --; mv.last_pos.j ++;
       break;
     }
     case(6):{ //jump left up
-      p.i += 2; p.j += 2;
-      board[p.i-1][p.j-1] = eat;
+      mv.last_pos.i += 2; mv.last_pos.j += 2;
+      board[mv.last_pos.i-1][mv.last_pos.j-1] = mv.last_eat;
       numberPieces++;
       break;
     }
     case(7):{ //jump left down
-      p.i -= 2; p.j += 2;
-      board[p.i+1][p.j-1] = eat;
+      mv.last_pos.i -= 2; mv.last_pos.j += 2;
+      board[mv.last_pos.i+1][mv.last_pos.j-1] = mv.last_eat;
       numberPieces++;
       break;
     }
     default: break;
   }
 
-  board[p.i][p.j] = value;
+  board[mv.last_pos.i][mv.last_pos.j] = value;
 
-  return p;
+  //return p;
 }
 
 // pos inside board
@@ -311,17 +319,14 @@ std::vector<std::list<int> > Board::getJumpMoves(Pos p){
   std::vector<std::list<int> > mx;
   int pieceType = board[p.i][p.j];
 
-  Pos lp; int lc, le; bool up;
   Pos px;
 
   if(pieceType > 0 || pieceType == -valueOfKing){
     if(jumpOK(p, mk_Pos(p.i-1,p.j+1))){
       //(2);
-
-      lp = last_play; lc = last_code; le = last_eat; up = last_up;
       px = play(p, 2);
       mx = getJumpMoves(px);
-      rmplay(lp,lc,le,up);
+      rmplay();
 
       if((int)mx.size() == 0){
         moves.push_back(std::list<int>());
@@ -338,10 +343,9 @@ std::vector<std::list<int> > Board::getJumpMoves(Pos p){
     if(jumpOK(p, mk_Pos(p.i+1,p.j+1))){
       //(3);
 
-      lp = last_play; lc = last_code; le = last_eat; up = last_up;
       px = play(p, 3);
       mx = getJumpMoves(px);
-      rmplay(lp,lc,le,up);
+      rmplay();
 
       if((int)mx.size() == 0){
         moves.push_back(std::list<int>());
@@ -359,10 +363,9 @@ std::vector<std::list<int> > Board::getJumpMoves(Pos p){
     if(jumpOK(p, mk_Pos(p.i-1,p.j-1))){
       //(6);
 
-      lp = last_play; lc = last_code; le = last_eat; up = last_up;
       px = play(p, 6);
       mx = getJumpMoves(px);
-      rmplay(lp,lc,le,up);
+      rmplay();
 
       if((int)mx.size() == 0){
         moves.push_back(std::list<int>());
@@ -378,10 +381,9 @@ std::vector<std::list<int> > Board::getJumpMoves(Pos p){
     if(jumpOK(p, mk_Pos(p.i+1,p.j-1))){
       //(7);
 
-      lp = last_play; lc = last_code; le = last_eat; up = last_up;
       px = play(p, 7);
       mx = getJumpMoves(px);
-      rmplay(lp,lc,le,up);
+      rmplay();
 
       if((int)mx.size() == 0){
         moves.push_back(std::list<int>());
@@ -441,11 +443,11 @@ int Board::eval_board(){
       if(std::abs(board[i][j]) == valueOfKing)
         value += valuesKing[i][j] * board[i][j];
       else if(sign(board[i][j]) > 0){
-        value += valuestry[i][j] * board[i][j];
+        value += values[i][j] * board[i][j];
         //printf("(%d,%d) val+ %d %d\n",i,j,values[i][j],board[i][j]);
       }
       else if(sign(board[i][j]) < 0){
-        value += valuestry[i][7-j] * board[i][j];
+        value += values[i][j] * board[i][j];
         //printf("(%d,%d) val- %d %d\n",i,j,values[i][7-j],board[i][j]);
       }
     }

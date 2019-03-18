@@ -6,6 +6,7 @@
 #include <utility>
 #include <vector>
 #include <list>
+#include <stack>
 
 #include "common.h"
 
@@ -14,10 +15,7 @@ public:
 	int board[8][8];
 	int numberPieces;
 
-	Pos last_play;
-  int last_code;
-	int last_eat;
-  bool last_up;
+	std::stack<Move> movesStack;
 
 	Pos best_play;
 	std::list<int> best_code;
@@ -28,7 +26,7 @@ public:
 
 	bool validMove(Pos p, int code);
 	Pos play(Pos p, int code);
-	Pos rmplay(Pos last_p, int last_c, int last_e, bool last_u);
+	void rmplay();
 
   bool inBounds(Pos p);
   bool open(Pos p);
