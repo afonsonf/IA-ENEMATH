@@ -9,7 +9,8 @@ CFLAGS= -std=c++11
 SRC =               \
 	main.cpp	\
   board.cpp  \
-	minimax.cpp
+	minimax.cpp \
+	mcts.cpp
 
 OBJ =  ${SRC:.cpp=.o}
 

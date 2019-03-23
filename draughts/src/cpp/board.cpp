@@ -127,7 +127,6 @@ Pos Board::play(Pos p, int code){
       break;
     }
     case(2):{ //jump right up
-
       mv.last_eat = board[p.i-1][p.j+1];
       board[p.i-1][p.j+1] = 0;
       p.i -= 2; p.j += 2;
@@ -156,7 +155,6 @@ Pos Board::play(Pos p, int code){
       numberPieces--;
       break;
     }
-
     case(7):{ //jump left down
       mv.last_eat = board[p.i+1][p.j-1];
       board[p.i+1][p.j-1] = 0;
