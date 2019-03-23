@@ -5,22 +5,28 @@
 #include "board.h"
 
 struct node{
-  //node* parent;
+  node* parent;
+
+  bool player1;
   int games;
   int wins;
+
+  std::vector<Pos> lst_pos;
   std::vector<std::list<int> > lst_moves;
   std::vector<node*> lst_childs;
 
-  //best_child
-  //best_value
+  int best_child;
+  double best_value;
 
-  node(){
+  node(node *p,bool player){
+    parent = p;
+
+    player1 = player;
     games = 0;
     wins = 0;
-  }
 
-  void expand(Board *board, bool player1){
-     //expand childs
+    best_child = 0;
+    best_value = 0;
   }
 
   bool has_childs(){
@@ -29,15 +35,17 @@ struct node{
 };
 
 static void clean(node *n){
-  //clean
+  for(node *x: n->lst_childs) clean(x);
+  free(n);
 }
 
 class MCTS{
 public:
-  int start_time;
+  static void mcts(Board *board, bool player1, int time_limit);
 
-  //node* select();
-  //int simulate(node *n);
+  static node* select(node* root,Board *board);
+  static void expand(node* n, Board *board);
+  static int simulate(Board *board, bool player1, int depth_max);
   //void backpropagate(node *n);
 
 };

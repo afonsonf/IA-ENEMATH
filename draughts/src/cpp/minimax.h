@@ -13,7 +13,7 @@
 
 class Minimax{
 public:
-	static Pos minimax(Board *board, int d, bool player);
+	static void minimax(Board *board, int d, bool player);
 	static int max_value(Board *board, int alfa, int beta, int depth_max);
 	static int min_value(Board *board, int alfa, int beta, int depth_max);
 };

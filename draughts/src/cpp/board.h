@@ -23,8 +23,8 @@ public:
 	int depth;
 
 	Board();
-	Board dup();
-	
+	Board* dup();
+
 	bool validMove(Pos p, int code);
 	Pos play(Pos p, int code);
 	void rmplay();

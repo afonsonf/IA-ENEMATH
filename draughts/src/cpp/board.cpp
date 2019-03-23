@@ -71,6 +71,18 @@ Board::Board(){
   depth = 0;
 }
 
+Board* Board::dup(){
+  Board *res = new Board();
+
+  for(int i=0;i<8;i++) for(int j=0;j<8;j++) res->board[i][j] = board[i][j];
+  res->numberPieces = numberPieces;
+
+  //i feel is not necessary:
+  //copy stsack
+
+  return res;
+}
+
 bool Board::validMove(Pos p, int code){
   if(!inBounds(p)){
     printf("Error: pos not in bounds (%d,%d)\n",p.i,p.j); return false;

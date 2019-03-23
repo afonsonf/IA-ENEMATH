@@ -2,7 +2,9 @@
 
 #include <time.h>
 #include <stdlib.h>
-Pos Minimax::minimax(Board *board, int depthx, bool player1)
+
+//best move saved in board
+void Minimax::minimax(Board *board, int depthx, bool player1)
 {
   srand(time(NULL));
 
@@ -18,8 +20,6 @@ Pos Minimax::minimax(Board *board, int depthx, bool player1)
     max_value(board,alfa,beta,depthx);
   else //if we are not player1, we want to minimize the board score
     min_value(board,alfa,beta,depthx);
-
-  return board->best_play;
 }
 
 int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
