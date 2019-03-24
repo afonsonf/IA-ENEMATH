@@ -60,7 +60,7 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
   board->best_code = n->parent->lst_moves[n->id];
   board->best_pos = n->parent->lst_pos[n->id];
 
-  printf("%d %d\n",n->wins,n->games);
+  //printf("%d %d\n",n->wins,n->games);
 
   free(dup1);clean(root);
 }
