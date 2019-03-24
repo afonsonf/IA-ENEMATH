@@ -40,7 +40,7 @@ int main(){
       //if(player1) printf("R plays\n");
       //else        printf("B plays\n");
 
-      p = board->best_play;
+      p = board->best_pos;
       for(auto it = board->best_code.begin();it!=board->best_code.end(); it++){
         //printf("(%d %d) %d\n",p.i,p.j,*it);
         p=board->play(p, *it);

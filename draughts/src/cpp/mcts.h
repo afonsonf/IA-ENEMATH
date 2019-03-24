@@ -10,6 +10,7 @@ struct node{
   bool player1;
   int games;
   int wins;
+  int id;
 
   std::vector<Pos> lst_pos;
   std::vector<std::list<int> > lst_moves;
@@ -18,7 +19,7 @@ struct node{
   int best_child;
   double best_value;
 
-  node(node *p,bool player){
+  node(node *p, bool player, int id){
     parent = p;
 
     player1 = player;
@@ -46,7 +47,7 @@ public:
   static node* select(node* root,Board *board);
   static void expand(node* n, Board *board);
   static int simulate(Board *board, bool player1, int depth_max);
-  //void backpropagate(node *n);
+  static void backpropagate(node *n, int win);
 
 };
 

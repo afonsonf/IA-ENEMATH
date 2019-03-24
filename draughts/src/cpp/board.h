@@ -17,7 +17,7 @@ public:
 
 	std::stack<Move> movesStack;
 
-	Pos best_play;
+	Pos best_pos;
 	std::list<int> best_code;
 
 	int depth;

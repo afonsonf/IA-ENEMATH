@@ -8,8 +8,8 @@ void Minimax::minimax(Board *board, int depthx, bool player1)
 {
   srand(time(NULL));
 
-  board->best_play = board->getMovablePieces(player1).front();
-  board->best_code = board->getMoves(board->best_play)[0];
+  board->best_pos = board->getMovablePieces(player1).front();
+  board->best_code = board->getMoves(board->best_pos)[0];
 
   //[TODO] test if wins next move
 
@@ -70,7 +70,7 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
       if (val < valx)
       {
         if (board->depth == 0){
-          board->best_play = p;
+          board->best_pos = p;
           board->best_code = codes;
         }
         val = valx;
@@ -134,7 +134,7 @@ int Minimax::min_value(Board *board, int alfa, int beta, int depth_max)
       if (val > valx)
       {
         if (board->depth == 0){
-          board->best_play = p;
+          board->best_pos = p;
           board->best_code = codes;
         }
         val = valx;
