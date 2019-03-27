@@ -2,9 +2,11 @@
 #define MCTS_H
 
 #include <time.h>
-
+#include <math.h>
 #include "common.h"
 #include "board.h"
+
+const double EXPLOR_PARAM = 1.3;
 
 struct node{
   node* parent;
@@ -18,9 +20,6 @@ struct node{
   std::vector<std::list<int> > lst_moves;
   std::vector<node*> lst_childs;
 
-  int best_child;
-  double best_value;
-
   node(node *p, bool player, int idx){
     parent = p;
     id =  idx;
@@ -28,9 +27,6 @@ struct node{
     player1 = player;
     games = 0;
     wins = 0;
-
-    best_child = 0;
-    best_value = 100;
   }
 
   bool has_childs(){
@@ -46,21 +42,27 @@ static void clean(node *n){
 static void print_tabs(int x){
   for(int i=0;i<x;i++) printf("  ");
 }
-static void print_tree(node *n, int tabs){
-  print_tabs(tabs);
-  printf("(%d,%d):\n",n->best_child,(int)n->lst_childs.size());
-  for(node *a: n->lst_childs) print_tree(a,tabs+1);
-}
+
 
 class MCTS{
 public:
   static void mcts(Board *board, int time_limit, bool player1);
 
+  static double eval(node *n, int tot);
+  static int select_child(node* n);
   static node* select(node* root,Board *board);
   static void expand(node* n, Board *board);
   static int simulate(Board *board, bool player1, int depth_max);
-  static void backpropagate(node *n, int win, bool player);
+  static void backpropagate(node *n, int win,bool player);
 
 };
+
+static void print_tree(node *n, int tabs){
+  if(!n->has_childs()) return;
+  print_tabs(tabs);
+  if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games),(int)n->games);
+  else printf("(--,%d):\n",(int)n->games);
+  for(node *a: n->lst_childs) print_tree(a,tabs+1);
+}
 
 #endif //MCTS_H

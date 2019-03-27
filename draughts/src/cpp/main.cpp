@@ -10,7 +10,7 @@ int main(){
   bool player1;
   Pos p;
 
-  int k=100,w=0,d=0,l=0,plays;
+  int k=1,w=0,d=0,l=0,plays;
   while(k--){
     board = new Board();
     player1 = true;
@@ -29,7 +29,7 @@ int main(){
         }
         break;
       }
-      if(plays>80){
+      if(plays>5){
         printf("draw\n");d++; break;
       }
 
@@ -40,7 +40,7 @@ int main(){
 
       else      {
         //Minimax::minimax(board, 4, player1);
-        MCTS::mcts(board,20000,player1);
+        MCTS::mcts(board,100000,player1);
       }
 
       // if(player1) printf("R plays\n");
