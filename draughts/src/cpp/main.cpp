@@ -10,13 +10,13 @@ int main(){
   bool player1;
   Pos p;
 
-  int k=1,w=0,d=0,l=0,plays;
+  int k=100,w=0,d=0,l=0,plays;
   while(k--){
     board = new Board();
     player1 = true;
     plays=0;
 
-    // board->print_board();
+    board->print_board();
     while(1){
       if(board->gameOver(player1)){
         if(player1){
@@ -29,22 +29,22 @@ int main(){
         }
         break;
       }
-      if(plays>5){
+      if(plays>120){
         printf("draw\n");d++; break;
       }
 
       if(player1){
         //Minimax::minimax(board, 4, player1);
-        MCTS::mcts(board,1000,player1);
+        MCTS::mcts(board,2000000,player1);
       }
 
       else      {
-        //Minimax::minimax(board, 4, player1);
-        MCTS::mcts(board,100000,player1);
+        Minimax::minimax(board, 4, player1);
+        //MCTS::mcts(board,500000,player1);
       }
 
-      // if(player1) printf("R plays\n");
-      // else        printf("B plays\n");
+      if(player1) printf("R plays\n");
+      else        printf("B plays\n");
 
       p = board->best_pos;
       for(auto it = board->best_code.begin();it!=board->best_code.end(); it++){
@@ -52,7 +52,7 @@ int main(){
         p=board->play(p, *it);
       }
 
-      // board->print_board();
+      board->print_board();
 
       player1 = !player1;
       plays++;

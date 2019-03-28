@@ -48,8 +48,8 @@ class MCTS{
 public:
   static void mcts(Board *board, int time_limit, bool player1);
 
-  static double eval(node *n, int tot);
-  static int select_child(node* n);
+  static double eval(node *n, int tot,bool p);
+  static int select_child(node* n,bool p);
   static node* select(node* root,Board *board);
   static void expand(node* n, Board *board);
   static int simulate(Board *board, bool player1, int depth_max);
@@ -58,10 +58,12 @@ public:
 };
 
 static void print_tree(node *n, int tabs){
+  return;
+  
   if(!n->has_childs()) return;
   print_tabs(tabs);
-  if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games),(int)n->games);
-  else printf("(--,%d):\n",(int)n->games);
+  //if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games),(int)n->games);
+  //else printf("(--,%d):\n",(int)n->games);
   for(node *a: n->lst_childs) print_tree(a,tabs+1);
 }
 
