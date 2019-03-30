@@ -36,7 +36,7 @@ struct node{
 
 static void clean(node *n){
   for(node *x: n->lst_childs) clean(x);
-  free(n);
+  delete(n);
 }
 
 static void print_tabs(int x){
@@ -59,7 +59,7 @@ public:
 
 static void print_tree(node *n, int tabs){
   return;
-  
+
   if(!n->has_childs()) return;
   print_tabs(tabs);
   //if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games),(int)n->games);

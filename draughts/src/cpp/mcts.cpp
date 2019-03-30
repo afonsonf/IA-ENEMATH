@@ -36,7 +36,7 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
     }
     else backpropagate(n, 0, true);
 
-    free(dup2);
+    delete(dup2);
 
     /*for(int i=0;i<(int)n->lst_childs.size();i++){
       dup2 = dup1->dup();
@@ -64,10 +64,10 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
       }
       else backpropagate(child, 1, true);
 
-      free(dup2);
+      delete(dup2);
     }*/
 
-    free(dup1);
+    delete(dup1);
   }
 
 
@@ -91,7 +91,7 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
 
   print_tree(root,0);
 
-  free(dup1);clean(root);
+  delete(dup1);clean(root);
 }
 
 double MCTS::eval(node *n,int tot,bool p){
