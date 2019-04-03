@@ -1,12 +1,18 @@
 #include "mcts.h"
 
+const double EXPLOR_PARAM = 1.3;
+
+
+
 void MCTS::mcts(Board *board, int time_limit, bool player1){
   int start_time = clock();
   srand(time(NULL));
 
   node *root = new node(NULL,player1,0);
+  expand(root,board);
+
   node *n, *child;
-  Board *dup1,*dup2;
+  Board *dup1;
   Pos pos;
   int res;
 
@@ -15,59 +21,28 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
     dup1 = board->dup();
     //print_tree(root,0);
     n = select(root,dup1);
-    dup2 = dup1->dup();
+
     expand(n,dup1);
 
     //simulate
-    res = simulate(dup2,n->player1,120);
+    res = simulate(dup1,n->player1,120);
 
     //backpropagate
     if(child->player1 && res>0){
-      backpropagate(n, 2, true);
+      backpropagate(n, 2, 0, true);
     }
     else if(!n->player1 && res<0){
-      backpropagate(n, 2, true);
+      backpropagate(n, 2, 0, true);
     }
-    else if(!n->player1 && res>0){
-      backpropagate(n, 2, false);
+    else if(!res){
+      backpropagate(n, 0, 1, true);
     }
-    else if(n->player1 && res<0){
-      backpropagate(n, 2, false);
+    else {
+      backpropagate(n, 2, 0, false);
     }
-    else backpropagate(n, 0, true);
-
-    delete(dup2);
-
-    /*for(int i=0;i<(int)n->lst_childs.size();i++){
-      dup2 = dup1->dup();
-      child = n->lst_childs[i];
-
-      //play moves
-      pos = n->lst_pos[i];
-      for(int code: n->lst_moves[i]) pos = dup2->play(pos,code);
-
-      //simulate
-      res = simulate(dup2,child->player1,120);
-
-      //backpropagate
-      if(child->player1 && res>0){
-        backpropagate(child, 2, true);
-      }
-      else if(!child->player1 && res<0){
-        backpropagate(child, 2, true);
-      }
-      else if(!child->player1 && res>0){
-        backpropagate(child, 2, false);
-      }
-      else if(child->player1 && res<0){
-        backpropagate(child, 2, false);
-      }
-      else backpropagate(child, 1, true);
-
-      delete(dup2);
-    }*/
 
     delete(dup1);
+
   }
 
 
@@ -90,6 +65,7 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
   //printf("%d %d\n",n->wins,n->games);
 
   print_tree(root,0);
+  //printf("nr games: %d\n",root->games);
 
   delete(dup1);clean(root);
 }
@@ -99,7 +75,7 @@ double MCTS::eval(node *n,int tot,bool p){
     return 0.5 + EXPLOR_PARAM*sqrt(log(tot+1));
   }
 
-  double wr = n->wins/((double)n->games+1);
+  double wr = n->wins/((double)n->games*2+1);
   if(p!=n->player1) wr = 1.0-wr;
   return wr + EXPLOR_PARAM*sqrt(log(tot+1)/((double)n->games+1));
 }
@@ -107,7 +83,7 @@ double MCTS::eval(node *n,int tot,bool p){
 int MCTS::select_child(node* n, bool p){
   int sz = (int)n->lst_childs.size();
   int best_i = 0;
-  double best_value = -1,val;
+  double best_value = 0,val;
 
   for(int i=0;i<sz;i++){
     val = eval(n->lst_childs[i],n->games,p);
@@ -176,11 +152,15 @@ int MCTS::simulate(Board *board, bool player1, int depth_max){
   return simulate(board,!player1,depth_max-1);
 }
 
-void MCTS::backpropagate(node *n, int win,bool player){
-  if(!n->parent) return;
+void MCTS::backpropagate(node *n, int win, int draw, bool player){
+  if(!n){
+    //n->games++;
+    return;
+  }
 
-  if(win==1 || player) n->wins+=win;
-  n->games+=2;
+  if(player) n->wins+=win;
+  if(draw) n->wins++;
+  n->games+=1;
 
-  backpropagate(n->parent,win,!player);
+  backpropagate(n->parent,win,draw,!player);
 }

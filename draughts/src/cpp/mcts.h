@@ -6,8 +6,6 @@
 #include "common.h"
 #include "board.h"
 
-const double EXPLOR_PARAM = 1.3;
-
 struct node{
   node* parent;
 
@@ -53,17 +51,22 @@ public:
   static node* select(node* root,Board *board);
   static void expand(node* n, Board *board);
   static int simulate(Board *board, bool player1, int depth_max);
-  static void backpropagate(node *n, int win,bool player);
+  static void backpropagate(node *n, int win,int draw, bool player);
 
 };
 
 static void print_tree(node *n, int tabs){
   return;
+  if(tabs > 1)return;
 
-  if(!n->has_childs()) return;
+  if(!n->has_childs()){
+    print_tabs(tabs);
+    printf("(----):\n");
+    return;
+  }
   print_tabs(tabs);
-  //if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games),(int)n->games);
-  //else printf("(--,%d):\n",(int)n->games);
+  if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games,1),(int)n->games);
+  else printf("(--,%d):\n",(int)n->games);
   for(node *a: n->lst_childs) print_tree(a,tabs+1);
 }
 
