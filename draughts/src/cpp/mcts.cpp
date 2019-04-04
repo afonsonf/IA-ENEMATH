@@ -1,6 +1,6 @@
 #include "mcts.h"
 
-const double EXPLOR_PARAM = 1.3;
+const double EXPLOR_PARAM = 0.5;
 node* MCTS::papi;
 
 void MCTS::mcts(Board *board, int time_limit, bool player1){
@@ -107,7 +107,7 @@ double MCTS::eval(node *n,int tot){
 
   double wr = n->wins/((double)n->games*2+1);
   if(papi->next_player!=n->next_player) wr = 1.0-wr;
-  return wr;// + EXPLOR_PARAM*sqrt(log(tot+1)/((double)n->games+1));
+  return wr + EXPLOR_PARAM*sqrt(log(tot+1)/((double)n->games+1));
 }
 
 int MCTS::select_child(node* n){
