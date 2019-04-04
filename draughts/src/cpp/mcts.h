@@ -14,8 +14,7 @@ struct node{
   int wins;
   int id;
 
-  std::vector<Pos> lst_pos;
-  std::vector<std::list<int> > lst_moves;
+  std::vector<Play> lst_plays;
   std::vector<node*> lst_childs;
 
   node(node *p, bool player, int idx){
@@ -50,7 +49,7 @@ public:
 
   static double eval(node *n, int tot);
   static int select_child(node* n);
-  static node* select(node* root,Board *board);
+  static node* select(node* node,Board *board);
   static void expand(node* n, Board *board);
   static int simulate(Board *board, bool player1, int depth_max);
   static void backpropagate(node *n, int win,int draw, bool player);

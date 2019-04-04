@@ -55,8 +55,8 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
         best_wr = (child->wins*1.0/child->games);
     }
   }
-  board->best_code = root->lst_moves[best_i];
-  board->best_pos = root->lst_pos[best_i];
+
+  board->best_play = root->lst_plays[best_i];
 
   clean(root);
 
@@ -127,35 +127,24 @@ int MCTS::select_child(node* n){
   return best_i;
 }
 
-node* MCTS::select(node *root, Board *board){
-  if(!root){
+node* MCTS::select(node *node, Board *board){
+  if(!node){
     printf("Erro null\n");
     exit(1);
   }
-  if(!root->has_childs()) return root;
+  if(!node->has_childs()) return node;
 
-  int best = select_child(root);
+  int best = select_child(node);
 
-  //printf("h %d %d\n",best,(int)root->lst_pos.size());
+  board->play(node->lst_plays[best]);
 
-  Pos pos = root->lst_pos[best];
-  for(int code: root->lst_moves[best]) pos = board->play(pos,code);
-
-  return select(root->lst_childs[best], board);
+  return select(node->lst_childs[best], board);
 }
 
 void MCTS::expand(node *n, Board *board){
-  std::vector<Pos> pieces = board->getMovablePieces(n->next_player);
-  std::vector<std::list<int> > moves;
-  int i = 0;
-  for(Pos p : pieces){
-    moves = board->getMoves(p);
-    for(std::list<int> codes: moves){
-      n->lst_pos.push_back(p);
-      n->lst_moves.push_back(codes);
-      n->lst_childs.push_back(new node(n,!n->next_player,i));
-      i++;
-    }
+  n->lst_plays = board->getPlays(n->next_player);
+  for(int i=0;i<(int)n->lst_plays.size();i++){
+    n->lst_childs.push_back(new node(n,!n->next_player,i));
   }
 }
 
@@ -166,19 +155,13 @@ int MCTS::simulate(Board *board, bool player1, int depth_max){
 
   int r;
 
-  std::vector<Pos> pieces = board->getMovablePieces(player1);
+  auto plays = board->getPlays(player1);
 
-  //random piece
-  r = rand() % (int) pieces.size();
-  Pos p = pieces[r];
+  //random play
+  r = rand() % (int) plays.size();
+  Play p = plays[r];
 
-  std::vector<std::list<int> > moves = board->getMoves(p);
-
-  //random moves
-  r = rand() % (int) moves.size();
-  std::list<int> codes = moves[r];
-
-  for(int code: codes) p = board->play(p,code);
+  board->play(p);
 
   return simulate(board,!player1,depth_max-1);
 }

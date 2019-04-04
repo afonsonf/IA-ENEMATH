@@ -131,7 +131,7 @@ bool Board::validMove(Pos p, int code){
 }
 
 //play piece of player in column
-Pos Board::play(Pos p, int code){
+Pos Board::play_aux(Pos p, int code){
   if(!validMove(p,code)){
     print_board(); exit(1);
   }
@@ -204,7 +204,7 @@ Pos Board::play(Pos p, int code){
 }
 
 //undo last play
-void Board::rmplay(){
+void Board::rmplay_aux(){
 
   Move mv = movesStack.top();
   movesStack.pop();
@@ -260,7 +260,16 @@ void Board::rmplay(){
 
   board[mv.last_pos.i][mv.last_pos.j] = value;
 
-  //return p;
+}
+
+void Board::play(Play p){
+  Pos piece = p.piece;
+  for(int code: p.codes){
+    piece = play_aux(piece,code);
+  }
+}
+void Board::rmplay(Play p){
+  for(int i=0;i<(int)p.codes.size();i++)rmplay_aux();
 }
 
 // pos inside board
@@ -345,9 +354,9 @@ std::vector<std::list<int> > Board::getJumpMoves(Pos p){
   if(pieceType > 0 || pieceType == -valueOfKing){
     if(jumpOK(p, mk_Pos(p.i-1,p.j+1))){
       //(2);
-      px = play(p, 2);
+      px = play_aux(p, 2);
       mx = getJumpMoves(px);
-      rmplay();
+      rmplay_aux();
 
       if((int)mx.size() == 0){
         moves.push_back(std::list<int>());
@@ -364,9 +373,9 @@ std::vector<std::list<int> > Board::getJumpMoves(Pos p){
     if(jumpOK(p, mk_Pos(p.i+1,p.j+1))){
       //(3);
 
-      px = play(p, 3);
+      px = play_aux(p, 3);
       mx = getJumpMoves(px);
-      rmplay();
+      rmplay_aux();
 
       if((int)mx.size() == 0){
         moves.push_back(std::list<int>());
@@ -384,9 +393,9 @@ std::vector<std::list<int> > Board::getJumpMoves(Pos p){
     if(jumpOK(p, mk_Pos(p.i-1,p.j-1))){
       //(6);
 
-      px = play(p, 6);
+      px = play_aux(p, 6);
       mx = getJumpMoves(px);
-      rmplay();
+      rmplay_aux();
 
       if((int)mx.size() == 0){
         moves.push_back(std::list<int>());
@@ -402,9 +411,9 @@ std::vector<std::list<int> > Board::getJumpMoves(Pos p){
     if(jumpOK(p, mk_Pos(p.i+1,p.j-1))){
       //(7);
 
-      px = play(p, 7);
+      px = play_aux(p, 7);
       mx = getJumpMoves(px);
-      rmplay();
+      rmplay_aux();
 
       if((int)mx.size() == 0){
         moves.push_back(std::list<int>());
@@ -455,6 +464,25 @@ std::vector<std::list<int> > Board::getMoves(Pos p){
 
   if(canStep(p))
   return getStepMoves(p);
+}
+
+std::vector<Play> Board::getPlays(bool player1){
+  std::vector<Play> res;
+  std::vector<Pos> pieces = getMovablePieces(player1);
+  std::vector<std::list<int> > moves;
+
+  Play play;
+  for(Pos p : pieces){
+    moves = getMoves(p);
+    for(std::list<int> codes: moves){
+      play.piece = p;
+      play.codes = codes;
+
+      res.push_back(play);
+    }
+  }
+
+  return res;
 }
 
 int Board::eval_board_1(){

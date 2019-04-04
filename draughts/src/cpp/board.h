@@ -17,8 +17,7 @@ public:
 
 	std::stack<Move> movesStack;
 
-	Pos best_pos;
-	std::list<int> best_code;
+	Play best_play;
 
 	int depth;
 
@@ -26,8 +25,12 @@ public:
 	Board* dup();
 
 	bool validMove(Pos p, int code);
-	Pos play(Pos p, int code);
-	void rmplay();
+
+	Pos play_aux(Pos p, int code);
+	void rmplay_aux();
+
+	void play(Play p);
+	void rmplay(Play p);
 
   bool inBounds(Pos p);
   bool open(Pos p);
@@ -43,7 +46,9 @@ public:
 	std::vector<std::list<int> > getJumpMoves(Pos p);
 	std::vector<std::list<int> > getStepMoves(Pos p);
 	std::vector<std::list<int> > getMoves(Pos p);
-  //bool final_board();
+
+	std::vector<Play> getPlays(bool player1);
+
 	int eval_board(int op = 1);
 	int eval_board_1();
 	int eval_board_2();

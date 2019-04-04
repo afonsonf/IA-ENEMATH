@@ -18,7 +18,9 @@ vhdbfgv
 1_3
 
 mcts(50) 500000 vs minimax 4, 1 minimax
-clock() bugs after 100th(+/-) game
+w: 121
+d: 28
+l: 51
 
 mcts(50) 200000 vs minimax 4, 1 minimax
 w: 112

@@ -39,7 +39,7 @@ int main(){
 
       if(player1){
         //Minimax::minimax(board, 2, player1, 1);
-        MCTS::mcts(board,500000,player1);
+        MCTS::mcts(board,100000,player1);
         //return 0;
       }
 
@@ -54,11 +54,7 @@ int main(){
         else        printf("B plays\n");
       }
 
-      p = board->best_pos;
-      for(auto it = board->best_code.begin();it!=board->best_code.end(); it++){
-        //printf("(%d %d) %d\n",p.i,p.j,*it);
-        p=board->play(p, *it);
-      }
+      board->play(board->best_play);
 
       if(SEE)board->print_board();
 
