@@ -1,6 +1,6 @@
 #include "mcts.h"
 
-const double EXPLOR_PARAM = 1.41421356237; //1.41421356237
+const double EXPLOR_PARAM = 0.52026009502; //1.41421356237
 node* MCTS::papi;
 
 void MCTS::mcts(Board *board, int time_limit, bool player1){
@@ -59,47 +59,8 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
   board->best_play = root->lst_plays[best_i];
 
   clean(root);
-
-  //printf("%ld (%ld %ld)\n",(clock() - start_time),clock(),start_time);
 }
-/*
-int best_i = 0, most_plays, most_wins;
-int sz = (int)root->lst_childs.size();
 
-for(int i=0;i<sz;i++){
-  child = root->lst_childs[i];
-  if(child->wins > most_wins){
-      best_i = i;
-      most_plays = child->games;
-      most_wins = child->wins;
-  }
-  else if(child->games > most_plays && child->wins == most_wins){
-    best_i = i;
-    most_plays = child->games;
-  }
-}
-board->best_code = root->lst_moves[best_i];
-board->best_pos = root->lst_pos[best_i];
-
-clean(root);
----------------------------------------------------------------------------
-dup1 = board->dup();
-  child = select(root,dup1);
-
-  if(!child->parent){
-    printf("Erro arvore!\n");exit(1);
-  }
-
-  while(true){
-    if(child->parent->parent) child = child->parent;
-    else break;
-  }
-
-  board->best_code = child->parent->lst_moves[child->id];
-  board->best_pos = child->parent->lst_pos[child->id];
-
-  delete(dup1);clean(root);
-*/
 
 double MCTS::eval(node *n,int tot){
   if(!n->has_childs()){
@@ -135,7 +96,6 @@ node* MCTS::select(node *node, Board *board){
   if(!node->has_childs()) return node;
 
   int best = select_child(node);
-
   board->play(node->lst_plays[best]);
 
   return select(node->lst_childs[best], board);
