@@ -1,10 +1,10 @@
 #include "mcts.h"
 
-const double EXPLOR_PARAM = 0.5;
+const double EXPLOR_PARAM = 1.41421356237; //1.41421356237
 node* MCTS::papi;
 
 void MCTS::mcts(Board *board, int time_limit, bool player1){
-  int start_time = clock();
+  clock_t start_time = clock();
   srand(time(NULL));
 
   node *root = new node(NULL,player1,0);
@@ -44,22 +44,23 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
 
   }
 
-  dup1 = board->dup();
-    child = select(root,dup1);
+  int best_i = 0;
+  double best_wr = 1;
+  int sz = (int)root->lst_childs.size();
 
-    if(!child->parent){
-      printf("Erro arvore!\n");exit(1);
+  for(int i=0;i<sz;i++){
+    child = root->lst_childs[i];
+    if((child->wins*1.0/child->games) < best_wr){
+        best_i = i;
+        best_wr = (child->wins*1.0/child->games);
     }
+  }
+  board->best_code = root->lst_moves[best_i];
+  board->best_pos = root->lst_pos[best_i];
 
-    while(true){
-      if(child->parent->parent) child = child->parent;
-      else break;
-    }
+  clean(root);
 
-    board->best_code = child->parent->lst_moves[child->id];
-    board->best_pos = child->parent->lst_pos[child->id];
-
-    delete(dup1);clean(root);
+  //printf("%ld (%ld %ld)\n",(clock() - start_time),clock(),start_time);
 }
 /*
 int best_i = 0, most_plays, most_wins;

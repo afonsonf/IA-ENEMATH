@@ -13,14 +13,24 @@ eval > pos para player1
 passar eval para minimax
 simplificar minimax !?
 
-w: 45
-d: 44
-l: 11
-
-w: 44
-d: 46
-l: 10
-
 vhdbfgv
 1_1 || 1_3_5_6
 1_3
+
+mcts(50) 500000 vs minimax 4, 1 minimax
+clock() bugs after 100th(+/-) game
+
+mcts(50) 200000 vs minimax 4, 1 minimax
+w: 112
+d: 34
+l: 54
+
+mcts(50) 100000 vs minimax 4, 1 minimax
+w: 107
+d: 36
+l: 57
+
+mcts(50) 50000 vs minimax 4, 1 minimax
+w: 78
+d: 58
+l: 64

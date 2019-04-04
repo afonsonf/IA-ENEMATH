@@ -14,7 +14,6 @@ struct Pos{
     if(i==b.i) return j<b.j;
     return i<b.i;
   }
-
 };
 
 static Pos mk_Pos(int i, int j){
@@ -28,6 +27,11 @@ struct Move{
   int last_code;
   int last_eat;
   bool last_up;
+};
+
+struct Play{
+  Pos piece;
+  std::list<int> codes;
 };
 
 static int sign(int val) {

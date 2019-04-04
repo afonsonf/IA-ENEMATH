@@ -12,7 +12,7 @@ int main(){
   bool player1;
   Pos p;
 
-  int k=50,w=0,d=0,l=0,plays;
+  int k=200,w=0,d=0,l=0,plays;
   while(k--){
     board = new Board();
     player1 = false;
@@ -22,27 +22,29 @@ int main(){
     while(1){
       if(board->gameOver(player1)){
         if(player1){
-          printf("B wins\n");
           l++;
+          printf("B wins (%2d::%2d::%2d)\n",w,d,l);
         }
         else{
-          printf("R wins\n");
           w++;
+          printf("R wins (%2d::%2d::%2d)\n",w,d,l);
         }
         break;
       }
       if(plays>120){
-        printf("draw\n");d++; break;
+        d++;
+        printf("draw   (%2d::%2d::%2d)\n",w,d,l);
+        break;
       }
 
       if(player1){
-        //Minimax::minimax(board, 4, player1, 1);
-        MCTS::mcts(board,50000,player1);
+        //Minimax::minimax(board, 2, player1, 1);
+        MCTS::mcts(board,500000,player1);
         //return 0;
       }
 
       else      {
-        Minimax::minimax(board, 2, player1, 1);
+        Minimax::minimax(board, 4, player1, 1);
         //MCTS::mcts(board,50000,player1);
         //return 0;
       }
