@@ -9,7 +9,7 @@
 struct node{
   node* parent;
 
-  bool player1;
+  bool next_player;
   int games;
   int wins;
   int id;
@@ -22,7 +22,7 @@ struct node{
     parent = p;
     id =  idx;
 
-    player1 = player;
+    next_player = player;
     games = 0;
     wins = 0;
   }
@@ -44,10 +44,12 @@ static void print_tabs(int x){
 
 class MCTS{
 public:
+  static node* papi;
+
   static void mcts(Board *board, int time_limit, bool player1);
 
-  static double eval(node *n, int tot,bool p);
-  static int select_child(node* n,bool p);
+  static double eval(node *n, int tot);
+  static int select_child(node* n);
   static node* select(node* root,Board *board);
   static void expand(node* n, Board *board);
   static int simulate(Board *board, bool player1, int depth_max);
@@ -65,7 +67,7 @@ static void print_tree(node *n, int tabs){
     return;
   }
   print_tabs(tabs);
-  if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games,1),(int)n->games);
+  if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games),(int)n->games);
   else printf("(--,%d):\n",(int)n->games);
   for(node *a: n->lst_childs) print_tree(a,tabs+1);
 }

@@ -15,7 +15,7 @@ int main(){
   int k=50,w=0,d=0,l=0,plays;
   while(k--){
     board = new Board();
-    player1 = true;
+    player1 = false;
     plays=0;
 
     if(SEE)board->print_board();
@@ -36,14 +36,14 @@ int main(){
       }
 
       if(player1){
-        //Minimax::minimax(board, 2, player1);
-        MCTS::mcts(board,50000,player1);
+        //Minimax::minimax(board, 4, player1, 1);
+        MCTS::mcts(board,500000,player1);
         //return 0;
       }
 
       else      {
-        Minimax::minimax(board, 2, player1);
-        //MCTS::mcts(board,500000,player1);
+        Minimax::minimax(board, 6, player1, 1);
+        //MCTS::mcts(board,50000,player1);
         //return 0;
       }
 
@@ -69,21 +69,3 @@ int main(){
 
   return 0;
 }
-
-/*
-board->print_board();
-
-board->play(mk_Pos(1,5), 4);
-board->play(mk_Pos(0,4), 5);
-
-board->play(mk_Pos(5,5), 4);
-board->play(mk_Pos(4,4), 4);
-
-board->play(mk_Pos(6,6), 4);
-
-board->print_board();
-
-std::vector<std::list<int> > moves;
-moves = board->getMoves(mk_Pos(2,2));
-print_moves(moves);
-*/

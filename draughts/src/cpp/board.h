@@ -44,7 +44,9 @@ public:
 	std::vector<std::list<int> > getStepMoves(Pos p);
 	std::vector<std::list<int> > getMoves(Pos p);
   //bool final_board();
-	int eval_board();
+	int eval_board(int op = 1);
+	int eval_board_1();
+	int eval_board_2();
 
 	void print_board();
 };

@@ -1,7 +1,7 @@
 #include "board.h"
 
 //values growing [NOTE change eval function to use]
-int valuest[8][8] = {
+int values_2[8][8] = {
   {1, 1, 1, 3, 3, 5, 5, 6},
   {1, 1, 1, 3, 3, 5, 5, 6},
   {1, 1, 1, 3, 3, 5, 5, 6},
@@ -13,7 +13,7 @@ int valuest[8][8] = {
 };
 
 //copied from example
-int values[8][8] = {
+int values_[8][8] = {
   {4, 4, 4, 4, 4, 4, 4, 4},
   {4, 3, 3, 3, 3, 3, 3, 3},
   {4, 3, 2, 2, 2, 2, 2, 2},
@@ -24,8 +24,19 @@ int values[8][8] = {
   {4, 4, 4, 4, 4, 4, 4, 4}
 };
 
+int values_1[8][8] = {
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1}
+};
+
 //two values [NOTE change eval function to use]
-int valuesm[8][8] = {
+int values_a[8][8] = {
   {1, 1, 1, 1, 3, 3, 3, 3},
   {1, 1, 1, 1, 3, 3, 3, 3},
   {1, 1, 1, 1, 3, 3, 3, 3},
@@ -446,24 +457,43 @@ std::vector<std::list<int> > Board::getMoves(Pos p){
   return getStepMoves(p);
 }
 
-int Board::eval_board(){
+int Board::eval_board_1(){
   int value = 0;
   for(int i=0;i<8;i++){
     for(int j=0; j<8;j++){
       if(std::abs(board[i][j]) == valueOfKing)
         value += valuesKing[i][j] * board[i][j];
       else if(sign(board[i][j]) > 0){
-        value += values[i][j] * board[i][j];
-        //printf("(%d,%d) val+ %d %d\n",i,j,values[i][j],board[i][j]);
+        value += values_1[i][j] * board[i][j];
       }
       else if(sign(board[i][j]) < 0){
-        value += values[i][j] * board[i][j];
-        //printf("(%d,%d) val- %d %d\n",i,j,values[i][7-j],board[i][j]);
+        value += values_1[i][7-j] * board[i][j];
       }
     }
   }
-  //printf("%d / %d\n",value, numberPieces);
   return value;
+}
+
+int Board::eval_board_2(){
+  int value = 0;
+  for(int i=0;i<8;i++){
+    for(int j=0; j<8;j++){
+      if(std::abs(board[i][j]) == valueOfKing)
+        value += valuesKing[i][j] * board[i][j];
+      else if(sign(board[i][j]) > 0){
+        value += values_2[i][j] * board[i][j];
+      }
+      else if(sign(board[i][j]) < 0){
+        value += values_2[i][7-j] * board[i][j];
+      }
+    }
+  }
+  return value;
+}
+
+int Board::eval_board(int op /*=1*/){
+  if(op==1) return eval_board_1();
+  else return eval_board_2();
 }
 
 

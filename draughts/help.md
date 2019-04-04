@@ -10,6 +10,17 @@ numerar posicoes
 
 eval > pos para player1
 
-o de speed seria usar apenas 1 board
+passar eval para minimax
+simplificar minimax !?
 
-parar o de speed por causa dos follow up jumps, e para cada follow poder ter varias alternativas
+w: 45
+d: 44
+l: 11
+
+w: 44
+d: 46
+l: 10
+
+vhdbfgv
+1_1 || 1_3_5_6
+1_3

@@ -3,9 +3,12 @@
 #include <time.h>
 #include <stdlib.h>
 
+int Minimax::op;
+
 //best move saved in board
-void Minimax::minimax(Board *board, int depthx, bool player1)
+void Minimax::minimax(Board *board, int depthx, bool player1, int option /*=1*/)
 {
+  Minimax::op = option;
   srand(time(NULL));
 
   board->best_pos = board->getMovablePieces(player1).front();
@@ -29,7 +32,7 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
   {
     if(k==-1) return -1000000;
     if(k==1) return 1000000;
-    return board->eval_board();
+    return board->eval_board(Minimax::op);
   }
 
   int val = INT_MIN, valx;
@@ -94,7 +97,7 @@ int Minimax::min_value(Board *board, int alfa, int beta, int depth_max)
   {
     if(k==-1) return -1000000;
     if(k==1) return 1000000;
-    return board->eval_board();
+    return board->eval_board(Minimax::op);
   }
   int val = INT_MAX, valx;
   int podar = 0;

@@ -23,4 +23,4 @@ ${EXEC_NAME}: ${OBJ}
 	${CC} ${CFLAGS} -c -o $@ $+ -lreadline
 
 clean:
-	rm ${EXEC_NAME} *.o *~ *# -rf
+	rm ${EXEC_NAME} *.o -rf
