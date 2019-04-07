@@ -16,8 +16,6 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
   int res;
 
   while((clock() - start_time) < time_limit){
-    //printf("%d %d\n",clock()-start_time,time_limit);
-
     child = select(root);
     expand(child);
 
@@ -29,7 +27,6 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
     backpropagate(child, res);
 
     delete(dup);
-
   }
 
   int best_i = 0;

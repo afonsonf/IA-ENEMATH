@@ -32,10 +32,9 @@ struct Node{
   }
 };
 
-static void clean(Node *node){
-  for(Node *x: node->lst_childs) clean(x);
-  delete(node->board);
-  delete(node);
+static void clean(Node *n){
+  for(Node *x: n->lst_childs) clean(x);
+  delete(n);
 }
 
 static void print_tabs(int x){
@@ -46,7 +45,7 @@ static void print_tabs(int x){
 class MCTS{
 public:
   static Node* root;
-  
+
   static void mcts(Board *board, int time_limit, bool player1);
 
   static double eval(Node *node, int tot);
