@@ -32,9 +32,10 @@ struct Node{
   }
 };
 
-static void clean(Node *n){
-  for(Node *x: n->lst_childs) clean(x);
-  delete(n);
+static void clean(Node *node){
+  for(Node *x: node->lst_childs) clean(x);
+  delete(node->board);
+  delete(node);
 }
 
 static void print_tabs(int x){

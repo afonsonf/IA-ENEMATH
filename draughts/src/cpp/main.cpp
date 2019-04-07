@@ -38,14 +38,14 @@ int main(){
       }
 
       if(player1){
-        Minimax::minimax(board, 4, player1, 1);
+        Minimax::minimax(board, 6, player1, 1);
         //MCTS::mcts(board,10000,player1);
         //return 0;
       }
 
       else      {
         //Minimax::minimax(board, 2, player1, 1);
-        MCTS::mcts(board,250000,player1);
+        MCTS::mcts(board,1000000,player1);
         //return 0;
       }
 
