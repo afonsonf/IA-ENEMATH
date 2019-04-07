@@ -58,7 +58,7 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
 
   board->best_play = root->lst_plays[best_i];
 
-  printf("n games: %d\n",root->games);
+  //printf("n games: %d\n",root->games);
 
   clean(root);
 }
