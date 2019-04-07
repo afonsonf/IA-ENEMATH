@@ -24,8 +24,8 @@ int main(){
     //p1 is true
     //p2 is false
 
-    p1->init(board, 100000, player1);
-    p2->init(board,5,false,1);
+    p1->init(board, 300000, player1);
+    p2->init(board,6,false,1);
     //p2->init(board,10000, player1);
 
     plays=0;

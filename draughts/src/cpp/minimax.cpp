@@ -3,7 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-Minimax::Minimax(){}
+Minimax::Minimax(){srand(42);}
 
 void Minimax::init(Board *board, int depth, bool player, int option /*= 1*/){
   this->board = board;
@@ -14,7 +14,6 @@ void Minimax::init(Board *board, int depth, bool player, int option /*= 1*/){
 
 //best move saved in board
 void Minimax::search(){
-  srand(time(NULL));
 
   auto plays = board->getPlays(player);
   board->best_play = plays[0];

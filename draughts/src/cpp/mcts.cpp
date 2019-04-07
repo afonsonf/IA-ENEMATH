@@ -2,7 +2,7 @@
 
 const double EXPLOR_PARAM = 1.41421356237; //1.41421356237 //0.52026009502
 
-MCTS::MCTS(){}
+MCTS::MCTS(){srand(42);}
 
 void MCTS::init(Board *board, int time_limit, bool player1){
   clean(root);
@@ -14,24 +14,27 @@ void MCTS::init(Board *board, int time_limit, bool player1){
 }
 
 void MCTS::play(Play p){
-  srand(time(NULL));
-
   Node *child;
   int i = 0;
 
+  //see wich child is now root
   for(Play x: root->lst_plays){
     if(x == p) break;
     i++;
   }
+
+  //if child not found
   if(i == root->lst_plays.size()){
     printf("MCTS::play play not found\n");
     exit(1);
   }
 
+  //save child and clean root
   child = root->lst_childs[i];
   root->lst_childs[i] = NULL;
-
   clean(root);
+
+  //root is now child
   root = child;
   root->parent = NULL;
 
