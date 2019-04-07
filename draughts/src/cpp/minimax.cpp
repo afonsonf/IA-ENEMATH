@@ -3,15 +3,20 @@
 #include <time.h>
 #include <stdlib.h>
 
-int Minimax::op;
+Minimax::Minimax(){}
+
+void Minimax::init(Board *board, int depth, bool player, int option /*= 1*/){
+  this->board = board;
+  this->depth = depth;
+  this->player = player;
+  this->option = option;
+}
 
 //best move saved in board
-void Minimax::minimax(Board *board, int depthx, bool player1, int option /*=1*/)
-{
-  Minimax::op = option;
+void Minimax::search(){
   srand(time(NULL));
 
-  auto plays = board->getPlays(player1);
+  auto plays = board->getPlays(player);
   board->best_play = plays[0];
 
   //[TODO] test if wins next move
@@ -19,10 +24,10 @@ void Minimax::minimax(Board *board, int depthx, bool player1, int option /*=1*/)
   int alfa = INT_MIN;
   int beta = INT_MAX;
 
-  if(player1) //if we are player1, we want to maximize the board score
-  max_value(board,alfa,beta,depthx);
+  if(player) //if we are player1, we want to maximize the board score
+  max_value(board,alfa,beta,depth);
   else //if we are not player1, we want to minimize the board score
-  min_value(board,alfa,beta,depthx);
+  min_value(board,alfa,beta,depth);
 }
 
 int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
@@ -32,7 +37,7 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
   {
     if(k==-1) return -1000000;
     if(k==1) return 1000000;
-    return board->eval_board(Minimax::op);
+    return board->eval_board(option);
   }
 
   int val = INT_MIN, valx;
@@ -78,7 +83,7 @@ int Minimax::min_value(Board *board, int alfa, int beta, int depth_max)
   {
     if(k==-1) return -1000000;
     if(k==1) return 1000000;
-    return board->eval_board(Minimax::op);
+    return board->eval_board(option);
   }
   int val = INT_MAX, valx;
   int podar = 0;
