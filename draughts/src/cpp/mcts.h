@@ -6,28 +6,25 @@
 #include "common.h"
 #include "board.h"
 
-struct node{
-  node* parent;
+struct Node{
+  Node* parent;
 
   bool next_player;
   int games;
   int wins;
-  int id;
 
   Board *board;
 
   std::vector<Play> lst_plays;
-  std::vector<node*> lst_childs;
+  std::vector<Node*> lst_childs;
 
-  node(node *p, bool player, int idx, Board *b){
-    parent = p;
-    id =  idx;
+  Node(Node *node, bool player, Board *board){
+    this->parent = node;
+    this->board = board;
 
-    next_player = player;
-    games = 0;
-    wins = 0;
-
-    board = b;
+    this->next_player = player;
+    this->games = 0;
+    this->wins = 0;
   }
 
   bool has_childs(){
@@ -35,10 +32,10 @@ struct node{
   }
 };
 
-static void clean(node *n){
-  for(node *x: n->lst_childs) clean(x);
-  delete(n->board);
-  delete(n);
+static void clean(Node *node){
+  for(Node *x: node->lst_childs) clean(x);
+  delete(node->board);
+  delete(node);
 }
 
 static void print_tabs(int x){
@@ -48,20 +45,21 @@ static void print_tabs(int x){
 
 class MCTS{
 public:
-  static node* papi;
-
+  static Node* root;
+  
   static void mcts(Board *board, int time_limit, bool player1);
 
-  static double eval(node *n, int tot);
-  static int select_child(node* n);
-  static node* select(node* node);
-  static void expand(node* n);
+  static double eval(Node *node, int tot);
+  static int select_child(Node* node);
+  static Node* select(Node* node);
+  static void expand(Node* node);
   static int simulate(Board *board, bool player1, int depth_max);
-  static void backpropagate(node *n, int win,int draw, bool player);
+  static void backpropagate(Node *node, int res);
+  static void backpropagate_aux(Node *node, int win,int draw, bool player);
 
 };
 
-static void print_tree(node *n, int tabs){
+static void print_tree(Node *n, int tabs){
   return;
   if(tabs > 1)return;
 
@@ -73,7 +71,7 @@ static void print_tree(node *n, int tabs){
   print_tabs(tabs);
   if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games),(int)n->games);
   else printf("(--,%d):\n",(int)n->games);
-  for(node *a: n->lst_childs) print_tree(a,tabs+1);
+  for(Node *a: n->lst_childs) print_tree(a,tabs+1);
 }
 
 #endif //MCTS_H

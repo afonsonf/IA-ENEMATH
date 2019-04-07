@@ -1,19 +1,17 @@
 #include "mcts.h"
 
-const double EXPLOR_PARAM = 0.52026009502; //1.41421356237
-node* MCTS::papi;
+const double EXPLOR_PARAM = 1.41421356237; //1.41421356237 //0.52026009502
+Node* MCTS::root;
 
 void MCTS::mcts(Board *board, int time_limit, bool player1){
   clock_t start_time = clock();
   srand(time(NULL));
 
-  node *root = new node(NULL,player1,0,board->dup());
+  root = new Node(NULL,player1,board->dup());
   expand(root);
 
-  papi = root;
-
-  node *child;
-  Board *dup1;
+  Node *child;
+  Board *dup;
   Pos pos;
   int res;
 
@@ -24,24 +22,14 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
     expand(child);
 
     //simulate
-    dup1 = child->board->dup();
-    res = simulate(dup1,child->next_player,50);
+    dup = child->board->dup();
+    res = simulate(dup,child->next_player,50);
 
     //backpropagate
-    if(child->next_player && res>0){
-      backpropagate(child, 2, 0, true);
-    }
-    else if(!child->next_player && res<0){
-      backpropagate(child, 2, 0, true);
-    }
-    else if(!res){
-      backpropagate(child, 0, 1, true);
-    }
-    else {
-      backpropagate(child, 2, 0, false);
-    }
+    backpropagate(child, res);
 
-    delete(dup1);
+    delete(dup);
+
   }
 
   int best_i = 0;
@@ -58,29 +46,27 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
 
   board->best_play = root->lst_plays[best_i];
 
-  //printf("n games: %d\n",root->games);
-
   clean(root);
 }
 
 
-double MCTS::eval(node *n,int tot){
-  if(!n->has_childs()){
+double MCTS::eval(Node *node,int tot){
+  if(!node->has_childs()){
     return 0.5 + EXPLOR_PARAM*sqrt(log(tot+1));
   }
 
-  double wr = n->wins/((double)n->games*2+1);
-  if(papi->next_player!=n->next_player) wr = 1.0-wr;
-  return wr + EXPLOR_PARAM*sqrt(log(tot+1)/((double)n->games+1));
+  double wr = node->wins/((double)node->games*2+1);
+  if(root->next_player!=node->next_player) wr = 1.0-wr;
+  return wr + EXPLOR_PARAM*sqrt(log(tot+1)/((double)node->games+1));
 }
 
-int MCTS::select_child(node* n){
-  int sz = (int)n->lst_childs.size();
+int MCTS::select_child(Node* node){
+  int sz = (int)node->lst_childs.size();
   int best_i = 0;
   double best_value = 0,val;
 
   for(int i=0;i<sz;i++){
-    val = eval(n->lst_childs[i],n->games);
+    val = eval(node->lst_childs[i],node->games);
     if(val>best_value){
       best_value = val;
       best_i = i;
@@ -90,7 +76,7 @@ int MCTS::select_child(node* n){
   return best_i;
 }
 
-node* MCTS::select(node *node){
+Node* MCTS::select(Node *node){
   if(!node){
     printf("Erro null\n");
     exit(1);
@@ -98,18 +84,17 @@ node* MCTS::select(node *node){
   if(!node->has_childs()) return node;
 
   int best = select_child(node);
-
   return select(node->lst_childs[best]);
 }
 
-void MCTS::expand(node *n){
+void MCTS::expand(Node *node){
   Board *dup;
 
-  n->lst_plays = n->board->getPlays(n->next_player);
-  for(int i=0;i<(int)n->lst_plays.size();i++){
-    dup = n->board->dup();
-    dup->play(n->lst_plays[i]);
-    n->lst_childs.push_back(new node(n,!n->next_player,i,dup));
+  node->lst_plays = node->board->getPlays(node->next_player);
+  for(int i=0;i<(int)node->lst_plays.size();i++){
+    dup = node->board->dup();
+    dup->play(node->lst_plays[i]);
+    node->lst_childs.push_back(new Node(node,!node->next_player,dup));
   }
 }
 
@@ -131,15 +116,30 @@ int MCTS::simulate(Board *board, bool player1, int depth_max){
   return simulate(board,!player1,depth_max-1);
 }
 
-void MCTS::backpropagate(node *n, int win, int draw, bool player){
-  if(!n->parent){
-    n->games++;
+void MCTS::backpropagate_aux(Node *node, int win, int draw, bool player){
+  if(!node->parent){
+    node->games++;
     return;
   }
 
-  if(player) n->wins+=win;
-  if(draw) n->wins++;
-  n->games+=1;
+  if(player) node->wins+=win;
+  if(draw) node->wins++;
+  node->games+=1;
 
-  backpropagate(n->parent,win,draw,!player);
+  backpropagate_aux(node->parent,win,draw,!player);
+}
+
+void MCTS::backpropagate(Node *node, int res){
+  if(node->next_player && res>0){
+    backpropagate_aux(node, 2, 0, true);
+  }
+  else if(!node->next_player && res<0){
+    backpropagate_aux(node, 2, 0, true);
+  }
+  else if(!res){
+    backpropagate_aux(node, 0, 1, true);
+  }
+  else {
+    backpropagate_aux(node, 2, 0, false);
+  }
 }
