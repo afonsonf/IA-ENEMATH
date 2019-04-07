@@ -9,16 +9,28 @@
 int main(){
   Board *board;
 
+  MCTS *p1 = new MCTS();
+  //MCTS *p2 = new MCTS();
+  Minimax *p2 = new Minimax();
   bool player1;
   Pos p;
 
   int k=200,w=0,d=0,l=0,plays;
   while(k--){
     board = new Board();
+
     player1 = false;
+
+    //p1 is true
+    //p2 is false
+
+    p1->init(board, 100000, player1);
+    p2->init(board,5,false,1);
+    //p2->init(board,10000, player1);
+
     plays=0;
 
-    if(SEE)board->print_board();
+    if(SEE) board->print_board();
     while(1){
       if(board->gameOver(player1)){
         if(player1){
@@ -37,17 +49,8 @@ int main(){
         break;
       }
 
-      if(player1){
-        Minimax::minimax(board, 6, player1, 1);
-        //MCTS::mcts(board,10000,player1);
-        //return 0;
-      }
-
-      else      {
-        //Minimax::minimax(board, 2, player1, 1);
-        MCTS::mcts(board,1000000,player1);
-        //return 0;
-      }
+      if(player1)p1->search();
+      else p2->search();
 
       if(SEE){
         if(player1) printf("R plays\n");
@@ -55,6 +58,8 @@ int main(){
       }
 
       board->play(board->best_play);
+      p1->play(board->best_play);
+      p2->play(board->best_play);
 
       if(SEE)board->print_board();
 

@@ -1,14 +1,45 @@
 #include "mcts.h"
 
 const double EXPLOR_PARAM = 1.41421356237; //1.41421356237 //0.52026009502
-Node* MCTS::root;
 
-void MCTS::mcts(Board *board, int time_limit, bool player1){
-  clock_t start_time = clock();
+MCTS::MCTS(){}
+
+void MCTS::init(Board *board, int time_limit, bool player1){
+  clean(root);
+
+  this->root = new Node(NULL, player1, board->dup());
+  expand(this->root);
+  this->time_limit = time_limit;
+  this->board = board;
+}
+
+void MCTS::play(Play p){
   srand(time(NULL));
 
-  root = new Node(NULL,player1,board->dup());
-  expand(root);
+  Node *child;
+  int i = 0;
+
+  for(Play x: root->lst_plays){
+    if(x == p) break;
+    i++;
+  }
+  if(i == root->lst_plays.size()){
+    printf("MCTS::play play not found\n");
+    exit(1);
+  }
+
+  child = root->lst_childs[i];
+  root->lst_childs[i] = NULL;
+
+  clean(root);
+  root = child;
+  root->parent = NULL;
+
+  if(!root->has_childs()) expand(root);
+}
+
+void MCTS::search(){
+  clock_t start_time = clock();
 
   Node *child;
   Board *dup;
@@ -19,14 +50,17 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
     child = select(root);
     expand(child);
 
-    //simulate
-    dup = child->board->dup();
-    res = simulate(dup,child->next_player,50);
+    for(int i=0;i<1;i++){
+      //simulate
+      dup = child->board->dup();
+      res = simulate(dup,child->next_player,60);
 
-    //backpropagate
-    backpropagate(child, res);
+      //backpropagate
+      backpropagate(child, res);
 
-    delete(dup);
+      delete(dup);
+    }
+
   }
 
   int best_i = 0;
@@ -43,7 +77,6 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
 
   board->best_play = root->lst_plays[best_i];
 
-  clean(root);
 }
 
 
@@ -105,6 +138,7 @@ int MCTS::simulate(Board *board, bool player1, int depth_max){
   auto plays = board->getPlays(player1);
 
   //random play
+  std::random_shuffle(plays.begin(), plays.end());
   r = rand() % (int) plays.size();
   Play p = plays[r];
 

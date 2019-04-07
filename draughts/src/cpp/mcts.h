@@ -3,6 +3,8 @@
 
 #include <time.h>
 #include <math.h>
+#include <algorithm>
+
 #include "common.h"
 #include "board.h"
 
@@ -33,31 +35,40 @@ struct Node{
 };
 
 static void clean(Node *node){
+  if(!node) return;
+
   for(Node *x: node->lst_childs) clean(x);
   delete(node->board);
   delete(node);
 }
 
-static void print_tabs(int x){
-  for(int i=0;i<x;i++) printf("  ");
-}
-
 
 class MCTS{
 public:
-  static Node* root;
+  Node* root;
+  int time_limit;
+  Board *board;
 
-  static void mcts(Board *board, int time_limit, bool player1);
+  MCTS();
 
-  static double eval(Node *node, int tot);
-  static int select_child(Node* node);
-  static Node* select(Node* node);
-  static void expand(Node* node);
-  static int simulate(Board *board, bool player1, int depth_max);
-  static void backpropagate(Node *node, int res);
-  static void backpropagate_aux(Node *node, int win,int draw, bool player);
+  void init(Board *board, int time_limit, bool player1);
+
+  void search();
+  void play(Play p);
+
+  double eval(Node *node, int tot);
+  int select_child(Node* node);
+  Node* select(Node* node);
+  void expand(Node* node);
+  int simulate(Board *board, bool player1, int depth_max);
+  void backpropagate(Node *node, int res);
+  void backpropagate_aux(Node *node, int win,int draw, bool player);
 
 };
+/*
+static void print_tabs(int x){
+  for(int i=0;i<x;i++) printf("  ");
+}
 
 static void print_tree(Node *n, int tabs){
   return;
@@ -73,5 +84,5 @@ static void print_tree(Node *n, int tabs){
   else printf("(--,%d):\n",(int)n->games);
   for(Node *a: n->lst_childs) print_tree(a,tabs+1);
 }
-
+*/
 #endif //MCTS_H

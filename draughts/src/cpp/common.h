@@ -10,9 +10,13 @@ struct Pos{
   int i;
   int j;
 
-  int operator< (Pos b){
+  inline int operator< (Pos b){
     if(i==b.i) return j<b.j;
     return i<b.i;
+  }
+
+  inline bool operator==(const Pos& p1){
+      return p1.i == this->i && p1.j == this->j;
   }
 };
 
@@ -32,6 +36,19 @@ struct Move{
 struct Play{
   Pos piece;
   std::list<int> codes;
+
+  inline bool operator==(const Play& p1){
+    if(!(this->piece == p1.piece)) return false;
+    if(p1.codes.size() != this->codes.size()) return false;
+
+    auto it1 = p1.codes.begin();
+    auto it2 = this->codes.begin();
+    for(;it1!=p1.codes.end() && it2!=this->codes.end();it1++,it2++){
+      if(*it1 != *it2) return false;
+    }
+
+    return true;
+  }
 };
 
 static int sign(int val) {
@@ -43,9 +60,7 @@ static int sign(int val) {
 static void print_moves(std::vector<std::list<int> > moves){
   printf("size: %d\n",(int)moves.size());
   for(int i=0;i<(int)moves.size();i++){
-    printf("a ");
     for(int code : moves[i]) printf("%d ",code);
-    printf("b\n");
   }
 }
 
