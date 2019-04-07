@@ -7,9 +7,10 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
   clock_t start_time = clock();
   srand(time(NULL));
 
-  node *root = new node(NULL,player1,0);
+  node *root = new node(NULL,player1,0,board->dup());
+  expand(root);
+
   papi = root;
-  expand(root,board);
 
   node *child;
   Board *dup1;
@@ -19,11 +20,11 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
   while((clock() - start_time) < time_limit){
     //printf("%d %d\n",clock()-start_time,time_limit);
 
-    dup1 = board->dup();
-    child = select(root,dup1);
-    expand(child,dup1);
+    child = select(root);
+    expand(child);
 
     //simulate
+    dup1 = child->board->dup();
     res = simulate(dup1,child->next_player,50);
 
     //backpropagate
@@ -41,7 +42,6 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
     }
 
     delete(dup1);
-
   }
 
   int best_i = 0;
@@ -58,7 +58,7 @@ void MCTS::mcts(Board *board, int time_limit, bool player1){
 
   board->best_play = root->lst_plays[best_i];
 
-  printf("n games: %d\n",root->games);
+  //printf("n games: %d\n",root->games);
 
   clean(root);
 }
@@ -90,7 +90,7 @@ int MCTS::select_child(node* n){
   return best_i;
 }
 
-node* MCTS::select(node *node, Board *board){
+node* MCTS::select(node *node){
   if(!node){
     printf("Erro null\n");
     exit(1);
@@ -98,15 +98,18 @@ node* MCTS::select(node *node, Board *board){
   if(!node->has_childs()) return node;
 
   int best = select_child(node);
-  board->play(node->lst_plays[best]);
 
-  return select(node->lst_childs[best], board);
+  return select(node->lst_childs[best]);
 }
 
-void MCTS::expand(node *n, Board *board){
-  n->lst_plays = board->getPlays(n->next_player);
+void MCTS::expand(node *n){
+  Board *dup;
+
+  n->lst_plays = n->board->getPlays(n->next_player);
   for(int i=0;i<(int)n->lst_plays.size();i++){
-    n->lst_childs.push_back(new node(n,!n->next_player,i));
+    dup = n->board->dup();
+    dup->play(n->lst_plays[i]);
+    n->lst_childs.push_back(new node(n,!n->next_player,i,dup));
   }
 }
 

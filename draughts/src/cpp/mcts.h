@@ -14,16 +14,20 @@ struct node{
   int wins;
   int id;
 
+  Board *board;
+
   std::vector<Play> lst_plays;
   std::vector<node*> lst_childs;
 
-  node(node *p, bool player, int idx){
+  node(node *p, bool player, int idx, Board *b){
     parent = p;
     id =  idx;
 
     next_player = player;
     games = 0;
     wins = 0;
+
+    board = b;
   }
 
   bool has_childs(){
@@ -33,6 +37,7 @@ struct node{
 
 static void clean(node *n){
   for(node *x: n->lst_childs) clean(x);
+  delete(n->board);
   delete(n);
 }
 
@@ -49,8 +54,8 @@ public:
 
   static double eval(node *n, int tot);
   static int select_child(node* n);
-  static node* select(node* node,Board *board);
-  static void expand(node* n, Board *board);
+  static node* select(node* node);
+  static void expand(node* n);
   static int simulate(Board *board, bool player1, int depth_max);
   static void backpropagate(node *n, int win,int draw, bool player);
 
