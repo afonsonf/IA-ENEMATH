@@ -53,7 +53,7 @@ void MCTS::search(){
     for(int i=0;i<1;i++){
       //simulate
       dup = child->board->dup();
-      res = simulate(dup,child->next_player,80);
+      res = simulate(dup,child->next_player,60);
 
       //backpropagate
       backpropagate(child, res);
