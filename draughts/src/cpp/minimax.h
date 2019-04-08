@@ -13,15 +13,17 @@
 
 class Minimax{
 public:
-	Board *board;
 	int depth;
-	bool player;
 	int option;
+	bool first_player;
 
-	Minimax();
+	Board *board;
+	bool player;
 
-	void init(Board *board, int depth, bool player, int option = 1);
-	void play(Play p){}
+	Minimax(int depth, bool first_player, int option = 1);
+
+	void init(Board *board);
+	void play(Play p);
 
 	void search();
 	int max_value(Board *board, int alfa, int beta, int depth_max);

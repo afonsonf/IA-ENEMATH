@@ -10,7 +10,8 @@ SRC =               \
 	main.cpp	\
   board.cpp  \
 	minimax.cpp \
-	mcts.cpp
+	mcts.cpp 	\
+	human.cpp
 
 OBJ =  ${SRC:.cpp=.o}
 

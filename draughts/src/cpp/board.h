@@ -40,8 +40,10 @@ public:
   bool canStep(Pos p);
 
 	std::vector<Pos> getMovablePieces (bool player1);
-	bool gameOver(bool player1);
-	int gameEnd();
+
+	int whoWins(bool next_player);
+	bool isDraw();
+	bool gameOver(bool next_player);
 
 	std::vector<std::list<int> > getJumpMoves(Pos p);
 	std::vector<std::list<int> > getStepMoves(Pos p);

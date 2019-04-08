@@ -13,7 +13,9 @@ Minimax:
   void rmPlay(Play p); <br>
   int eval_board(); <br>
 
-  !? void gameOver(bool player); <br>
-  !? void gameEnd(); <br>
+  bool gameOver(); someone win or draw <br>
+  bool whoWins(); 1 if true wins, -1 if false wins <br> 
+
+  void draw(); <br>
 
 MCTS:

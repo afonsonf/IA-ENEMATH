@@ -45,13 +45,15 @@ static void clean(Node *node){
 
 class MCTS{
 public:
-  Node* root;
   int time_limit;
+  bool first_player;
+
+  Node* root;
   Board *board;
 
-  MCTS();
+  MCTS(int time_limit, bool first_player);
 
-  void init(Board *board, int time_limit, bool player1);
+  void init(Board *board);
 
   void search();
   void play(Play p);

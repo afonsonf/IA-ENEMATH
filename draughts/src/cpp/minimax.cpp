@@ -3,13 +3,20 @@
 #include <time.h>
 #include <stdlib.h>
 
-Minimax::Minimax(){srand(42);}
-
-void Minimax::init(Board *board, int depth, bool player, int option /*= 1*/){
-  this->board = board;
+Minimax::Minimax(int depth, bool first_player, int option /*= 1*/){
   this->depth = depth;
-  this->player = player;
+  this->first_player = first_player;
   this->option = option;
+  srand(42);
+}
+
+void Minimax::init(Board *board){
+  this->board = board;
+  this->player = this->first_player;
+}
+
+void Minimax::play(Play p){
+  player = !player;
 }
 
 //best move saved in board
@@ -31,13 +38,12 @@ void Minimax::search(){
 
 int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
 {
-  int k = board->gameEnd();
-  if (k || board->depth >= depth_max)
-  {
-    if(k==-1) return -1000000;
-    if(k==1) return 1000000;
-    return board->eval_board(option);
+  if(board->gameOver(true)){
+    if(board->whoWins(true)) return -1000000;
+    return 0;
   }
+
+  if (board->depth >= depth_max) return board->eval_board(option);
 
   int val = INT_MIN, valx;
   int podar = 0;
@@ -77,13 +83,12 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
 
 int Minimax::min_value(Board *board, int alfa, int beta, int depth_max)
 {
-  int k = board->gameEnd();
-  if (k || board->depth >= depth_max)
-  {
-    if(k==-1) return -1000000;
-    if(k==1) return 1000000;
-    return board->eval_board(option);
+  if(board->gameOver(false)){
+    if(board->whoWins(false)) return 1000000;
+    return 0;
   }
+  if ( board->depth >= depth_max) return board->eval_board(option);
+
   int val = INT_MAX, valx;
   int podar = 0;
 

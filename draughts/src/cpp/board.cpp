@@ -333,15 +333,19 @@ std::vector<Pos> Board::getMovablePieces (bool player1){
   return res;
 }
 
-bool Board::gameOver(bool player1){
-  if(getMovablePieces(player1).empty()) return true;
-  return false;
+int Board::whoWins(bool next_player){
+  if(getMovablePieces(next_player).empty()){
+    if(next_player) return -1;
+    return 1;
+  }
+  return 0;
 }
 
-int Board::gameEnd(){
-  if(getMovablePieces(true).empty()) return -1;
-  if(getMovablePieces(false).empty()) return 1;
-  return 0;
+bool Board::isDraw(){return false;}
+
+bool Board::gameOver(bool next_player){
+  if(whoWins(next_player) || isDraw()) return true;
+  return false;
 }
 
 std::vector<std::list<int> > Board::getJumpMoves(Pos p){
@@ -527,7 +531,6 @@ int Board::eval_board(int op /*=1*/){
 
 //print board pretty
 void Board::print_board(){
-  printf("Board: %d\n", eval_board());
   printf("|-"); for(int i=0;i<8;i++)printf("--"); printf("-|\n");
   for(int i=0;i<8;i++){
     printf("| ");

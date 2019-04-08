@@ -2,14 +2,18 @@
 
 const double EXPLOR_PARAM = 1.41421356237; //1.41421356237 //0.52026009502
 
-MCTS::MCTS(){srand(42);}
+MCTS::MCTS(int time_limit, bool first_player){
+  srand(42);
 
-void MCTS::init(Board *board, int time_limit, bool player1){
+  this->time_limit = time_limit;
+  this->first_player = first_player;
+}
+
+void MCTS::init(Board *board){
   clean(root);
 
-  this->root = new Node(NULL, player1, board->dup());
+  this->root = new Node(NULL, this->first_player, board->dup());
   expand(this->root);
-  this->time_limit = time_limit;
   this->board = board;
 }
 
@@ -56,7 +60,7 @@ void MCTS::search(){
     for(int i=0;i<1;i++){
       //simulate
       dup = child->board->dup();
-      res = simulate(dup,child->next_player,60);
+      res = simulate(dup,child->next_player,80);
 
       //backpropagate
       backpropagate(child, res);
@@ -132,8 +136,10 @@ void MCTS::expand(Node *node){
 }
 
 int MCTS::simulate(Board *board, bool player1, int depth_max){
-  int end = board->gameEnd();
-  if(end) return end;
+  if(board->gameOver(player1)){
+    int k = board->whoWins(player1);
+    return k;
+  }
   if(!depth_max) return 0;
 
   int r;
