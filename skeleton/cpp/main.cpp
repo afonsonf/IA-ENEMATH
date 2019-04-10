@@ -66,8 +66,8 @@ int main(){
       else       p2->search();
 
       if(SEE){
-        if(player) printf("R plays\n");
-        else       printf("B plays\n");
+        if(player) printf("True plays\n");
+        else       printf("False plays\n");
       }
 
       board->play(board->best_play);

@@ -62,3 +62,19 @@ while ngames > 0:
 
         if player: p1.search()
         else:      p2.search()
+
+        if SEE :
+            if player: print("True plays")
+            else: print("False plays")
+
+        board.play(board.best_play)
+        p1.play(board.best_play)
+        p2.play(board.best_play)
+
+        if SEE: board.printBoard()
+
+        player = not player
+        plays += 1
+    #del board
+
+print("w: {}\nd: {}\nl: {}").format(w,d,l)
