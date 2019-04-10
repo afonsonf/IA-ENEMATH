@@ -3,10 +3,10 @@
 const double EXPLOR_PARAM = 1.3;//0.70710678118; //1.41421356237 //0.52026009502
 const int depth_max = 50;
 
-MCTS::MCTS(int time_limit, bool first_player){
+MCTS::MCTS(int NGAMES, bool first_player){
   srand(42);
 
-  this->time_limit = time_limit;
+  this->time_limit = NGAMES;
   this->first_player = first_player;
 }
 
@@ -24,13 +24,14 @@ void MCTS::play(Play p){
 
   //see wich child is now root
   for(Play x: root->lst_plays){
+    //printf("(%d) %d %d == %d %d\n",root->next_player,x.col,x.player,p.col,p.player);
     if(x == p) break;
     i++;
   }
 
   //if child not found
   if(i == root->lst_plays.size()){
-    printf("MCTS::play play not found %d\n",i);
+    printf("MCTS::play play not found %d (%d,%d)\n",p.col,root->next_player,p.player);
     exit(1);
   }
 
@@ -48,18 +49,6 @@ void MCTS::play(Play p){
 }
 
 void MCTS::search(){
-  Play p;
-  p = root->board->winPlay(root->next_player);
-  if(!p.isnull){
-    board->best_play = p;
-    return;
-  }
-  p = root->board->savePlay(root->next_player);
-  if(!p.isnull){
-    board->best_play = p;
-    return;
-  }
-
   clock_t start_time = clock();
 
   Node *child;
@@ -68,7 +57,7 @@ void MCTS::search(){
 
   int jogos = 0;
   while((clock() - start_time) < time_limit){
-  //while(jogos<250000){
+  //while(jogos<50000){
     child = select(root);
     if(!child->terminal) expand(child);
 
@@ -98,7 +87,7 @@ void MCTS::search(){
         best_i = i;
         best_val = val;
     }
-    //printf("%.2lf %.2lf %d\n",eval(root, child,0.7), child->reward, child->games);//printPlay(root->lst_plays[i]);
+    //printf("%.2lf %.2lf %d\n",eval(root, child,0), child->reward, child->games);//printPlay(root->lst_plays[i]);
   }
 
   board->best_play = root->lst_plays[best_i];
@@ -112,7 +101,7 @@ double MCTS::eval(Node *parent,Node *node, double EXPLOR_PARAM){
   }
 
   double wr = node->reward/(node->games+1);
-  if(root->next_player!=node->next_player) wr = 1.0-wr;
+  //if(root->next_player==node->next_player) wr = 1.0-wr;
   return wr + EXPLOR_PARAM*sqrt(log(parent->games+1)/((double)node->games+1));
 }
 
@@ -194,10 +183,12 @@ int MCTS::simulate(Board *board, bool player1, int depth, Node *child){
   return simulate(board,!player1,depth-1,child);
 }
 
+/*
 void MCTS::backpropagate_aux(Node *node, double val, bool player){
   if(!node) return;
 
-  if(node->next_player==player) node->reward+=val;
+  //if(node->next_player==player)
+  node->reward+=val;
 
   //if(val) node->games+=val;
   node->games++;
@@ -210,19 +201,17 @@ void MCTS::backpropagate(Node *node, int res){
     //if(res<0) backpropagate_aux(node, -res, node->next_player);
     backpropagate_aux(node, 1, node->next_player);
   }
-  else if((node->next_player && res<0) || (!node->next_player && res>0)){
-    backpropagate_aux(node, 0, node->next_player);
-  }
   else if(!res){
     backpropagate_aux(node, 0, node->next_player);
   }
 }
+*/
 
-/*
 void MCTS::backpropagate_aux(Node *node, double val){
   if(!node) return;
 
   node->reward+=val;
+  //if(val >1 || val <1) node->games += 5;
   node->games+=1;
 
   backpropagate_aux(node->parent,val);
@@ -231,13 +220,13 @@ void MCTS::backpropagate_aux(Node *node, double val){
 void MCTS::backpropagate(Node *node, int res){
   if((root->next_player && res>0) || (!root->next_player && res<0)){
     if(node->terminal)
-      backpropagate_aux(node, 20.0);
+      backpropagate_aux(node, 5.0);
     else
       backpropagate_aux(node, 1.0);
   }
   else if((root->next_player && res<0) || (!root->next_player && res>0)){
     if(node->terminal)
-      backpropagate_aux(node, -30.0);
+      backpropagate_aux(node, -10.0);
     else
       backpropagate_aux(node, -1.0);
   }
@@ -245,4 +234,3 @@ void MCTS::backpropagate(Node *node, int res){
     backpropagate_aux(node, 0);
   }
 }
-*/

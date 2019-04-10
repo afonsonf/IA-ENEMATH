@@ -34,9 +34,6 @@ public:
 
 	int final_board();
 
-	Play winPlay(bool next_player);
-	Play savePlay(bool next_player);
-
 	int whoWins(bool next_player);
 	bool isDraw();
 	bool gameOver(bool next_player);

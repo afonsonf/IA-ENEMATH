@@ -48,7 +48,17 @@ l: 66
 
 
 
-
+void Human::printIndex(){
+  printf("Code 0 - step right up\n");
+  printf("Code 1 - step right down\n");
+  printf("Code 2 - jump right up\n");
+  printf("Code 3 - jump right down\n");
+  printf("Code 4 - step left up\n");
+  printf("Code 5 - step left down\n");
+  printf("Code 6 - jump left up\n");
+  printf("Code 7 - jump left down\n");
+  printf("\n");
+}
 
 
 

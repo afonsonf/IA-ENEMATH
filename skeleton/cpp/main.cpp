@@ -6,7 +6,7 @@
 #include "human.h"
 
 #define SEE false
-
+const int depth_max = 120;
 int main(){
   Board *board;
   bool first_player = false;
@@ -43,27 +43,27 @@ int main(){
         win = board->whoWins(player);
         if(win == -1){
           l++;
-          printf("B wins (%2d::%2d::%2d)\n",w,d,l);
+          printf("False wins (%2d::%2d::%2d)\n",w,d,l);
         }
         else if(win == 1){
           w++;
-          printf("R wins (%2d::%2d::%2d)\n",w,d,l);
+          printf("True wins  (%2d::%2d::%2d)\n",w,d,l);
         }
         else{
           d++;
-          printf("draw   (%2d::%2d::%2d)\n",w,d,l);
+          printf("draw       (%2d::%2d::%2d)\n",w,d,l);
         }
         break;
       }
 
-      if(plays>120){
+      if(plays>depth_max){
         d++;
         printf("draw   (%2d::%2d::%2d)\n",w,d,l);
         break;
       }
 
       if(player) p1->search();
-      else p2->search();
+      else       p2->search();
 
       if(SEE){
         if(player) printf("R plays\n");

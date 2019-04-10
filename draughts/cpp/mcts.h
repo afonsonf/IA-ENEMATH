@@ -72,7 +72,7 @@ public:
   void expand(Node* node);
   int simulate(Board *board, bool player1, int depth, Node *child);
   void backpropagate(Node *node, int res);
-  void backpropagate_aux(Node *node, double val, bool player);
+  void backpropagate_aux(Node *node, double val);
 
 };
 #endif //MCTS_H

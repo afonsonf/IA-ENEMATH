@@ -16,7 +16,6 @@ public:
   void play(Play p);
 
   void search();
-  void printIndex();
   bool inRange(int x, int i, int j);
 };
 

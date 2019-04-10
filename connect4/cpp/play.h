@@ -8,7 +8,7 @@
 struct Play{
   bool isnull;
   int col;
-  int player;
+  bool player;
 
   //define operator==
   inline bool operator==(const Play& p1){

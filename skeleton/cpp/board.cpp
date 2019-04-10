@@ -8,8 +8,8 @@ Board::Board(){
 //duplication
 Board* Board::dup(){
   Board *dup = new Board();
-
-  //copy ONLY board, stack of plays not needed
+  if(!playsStack.empty()) dup->playsStack.push(playsStack.top());
+  //copy board
 
   return dup;
 }

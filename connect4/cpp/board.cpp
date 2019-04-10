@@ -44,9 +44,12 @@ Board* Board::dup(){
 void Board::play(Play p){
   //add play to the stack
 	playsStack.push(p);
+	int player;
+	if(p.player) player = 2;
+	else player = 1;
 
   //play it in the board
-	this->board[5-this->np[p.col]][p.col]=p.player;
+	this->board[5-this->np[p.col]][p.col]=player;
 	this->np[p.col]++;
 }
 
@@ -78,14 +81,11 @@ std::vector<Play> Board::getPlays(bool player){
   std::vector<Play> res;
 
 	Play p;
-	int xplay;
-	if(player) xplay = 2;
-	else xplay = 1;
 
   //add plays to res
 	for(int i=0;i<7;i++){
 		if(np[i]<6){
-			p.col = i, p.player = xplay;
+			p.col = i, p.player = player;
 			p.isnull = false;
 			res.push_back(p);
 		}
@@ -144,36 +144,6 @@ int Board::final_board(){
 	}
 
 	return 0;
-}
-
-Play Board::winPlay(bool next_player){
-	auto plays = getPlays(next_player);
-	int win = 0;
-	for(Play p: plays){
-		play(p);
-		win = whoWins(!next_player);
-		rmplay();
-
-		if(next_player && win>0)  return p;
-		if(!next_player && win<0) return p;
-	}
-	Play p;p.isnull = true;
-	return p;
-}
-
-Play Board::savePlay(bool next_player){
-	auto plays = getPlays(!next_player);
-	int win = 0;
-	for(Play p: plays){
-		play(p);
-		win = whoWins(next_player);
-		rmplay();
-
-		if(next_player && win>0)  return p;
-		if(!next_player && win<0) return p;
-	}
-	Play p;p.isnull = true;
-	return p;
 }
 
 //check whoWins
@@ -252,7 +222,8 @@ int Board::eval_board(){
 		val+=Global::m6c[col[i]];
 	}
 	val+=Global::m6c[col[6]];
-	int x = playsStack.top().player;
+	int player = playsStack.top().player;
+	int x = (player)? 2 : 1;
 	if(x==1) val+=16;
 	else     val-=16;
 	return val;
