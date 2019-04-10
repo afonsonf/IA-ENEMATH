@@ -86,6 +86,7 @@ std::vector<Play> Board::getPlays(bool player){
 	for(int i=0;i<7;i++){
 		if(np[i]<6){
 			p.col = i, p.player = xplay;
+			p.isnull = false;
 			res.push_back(p);
 		}
 	}
@@ -143,6 +144,36 @@ int Board::final_board(){
 	}
 
 	return 0;
+}
+
+Play Board::winPlay(bool next_player){
+	auto plays = getPlays(next_player);
+	int win = 0;
+	for(Play p: plays){
+		play(p);
+		win = whoWins(!next_player);
+		rmplay();
+
+		if(next_player && win>0)  return p;
+		if(!next_player && win<0) return p;
+	}
+	Play p;p.isnull = true;
+	return p;
+}
+
+Play Board::savePlay(bool next_player){
+	auto plays = getPlays(!next_player);
+	int win = 0;
+	for(Play p: plays){
+		play(p);
+		win = whoWins(next_player);
+		rmplay();
+
+		if(next_player && win>0)  return p;
+		if(!next_player && win<0) return p;
+	}
+	Play p;p.isnull = true;
+	return p;
 }
 
 //check whoWins

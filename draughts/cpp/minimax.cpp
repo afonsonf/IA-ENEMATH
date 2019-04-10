@@ -63,7 +63,7 @@ int Minimax::max_value(Board *board, int alfa, int beta, int depth_max)
     board->depth--;
 
     //rmplay
-    board->rmplay(p);
+    board->rmplay();
 
     //process valx
     if (val < valx){
@@ -106,7 +106,7 @@ int Minimax::min_value(Board *board, int alfa, int beta, int depth_max)
     board->depth--;
 
     //rmplay
-    board->rmplay(p);
+    board->rmplay();
 
     //process valx
     if (val > valx){

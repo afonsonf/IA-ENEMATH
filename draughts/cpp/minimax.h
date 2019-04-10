@@ -6,9 +6,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <algorithm>
-#include <stack>
 
-#include "common.h"
+#include "play.h"
 #include "board.h"
 
 class Minimax{

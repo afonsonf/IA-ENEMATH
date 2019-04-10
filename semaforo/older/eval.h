@@ -1,6 +1,8 @@
 #ifndef Eval_H
 #define Eval_H
 
+#include "common.h" 
+
 class Eval{
 public:
     static int eval4[4][4][4][4];

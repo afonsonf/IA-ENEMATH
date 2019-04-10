@@ -14,8 +14,10 @@ Minimax:
   int eval_board(); <br>
 
   bool gameOver(); someone win or draw <br>
-  bool whoWins(); 1 if true wins, -1 if false wins <br> 
+  bool whoWins(); 1 if true wins, -1 if false wins <br>
 
   void draw(); <br>
 
 MCTS:
+
+Summary of the methods:

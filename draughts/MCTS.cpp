@@ -40,7 +40,7 @@ ull tab;
 char s[100];
 node *T;
 const double EXPLOR_PARAM = 1.3;
-const bool DEBUG = false;
+const bool DEBUG = true;
 const int NGAMES = 250000; //aguenta 10M, 1M~40s
 
 int cheat;

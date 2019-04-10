@@ -6,19 +6,18 @@
 
 //define Play
 struct Play{
-  bool isnull;
-  int col;
-  int player;
+  int i;
+  int j;
 
   //define operator==
   inline bool operator==(const Play& p1){
-    return this->col == p1.col && this->player == p1.player;
+    return this->i == p1.i && this->j == p1.j;
   }
 };
 
 //print play in one line
 static void printPlay(Play p){
-  printf(" %d",p.col);
+  printf("(%d %d)",p.i,p.j);
   printf("\n"); //end it with nl
 }
 

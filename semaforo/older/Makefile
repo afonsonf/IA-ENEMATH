@@ -1,18 +1,16 @@
 
-EXEC_NAME=game
+EXEC_NAME=a.out
 
 CC=g++
 
 CFLAGS= -std=c++11
 
 # Source files
-SRC =         \
-	main.cpp	  \
-  board.cpp   \
-	minimax.cpp \
-	mcts.cpp 	  \
-	human.cpp   \
-	eval.cpp
+SRC =               \
+	main.cpp	\
+    board.cpp     \
+	eval.cpp   \
+	minimax.cpp     \
 
 OBJ =  ${SRC:.cpp=.o}
 
@@ -25,4 +23,4 @@ ${EXEC_NAME}: ${OBJ}
 	${CC} ${CFLAGS} -c -o $@ $+ -lreadline
 
 clean:
-	rm ${EXEC_NAME} *.o -rf
+	rm ${EXEC_NAME} *.o *~ *# -rf

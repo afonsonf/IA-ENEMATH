@@ -48,6 +48,18 @@ void MCTS::play(Play p){
 }
 
 void MCTS::search(){
+  Play p;
+  p = root->board->winPlay(root->next_player);
+  if(!p.isnull){
+    board->best_play = p;
+    return;
+  }
+  p = root->board->savePlay(root->next_player);
+  if(!p.isnull){
+    board->best_play = p;
+    return;
+  }
+
   clock_t start_time = clock();
 
   Node *child;
@@ -55,8 +67,8 @@ void MCTS::search(){
   int res;
 
   int jogos = 0;
-  //while((clock() - start_time) < time_limit){
-  while(jogos<250000){
+  while((clock() - start_time) < time_limit){
+  //while(jogos<250000){
     child = select(root);
     if(!child->terminal) expand(child);
 
@@ -81,12 +93,12 @@ void MCTS::search(){
 
   for(int i=0;i<sz;i++){
     child = root->lst_childs[i];
-    val = child->games;
+    val = eval(root, child,0);
     if(val > best_val){
         best_i = i;
         best_val = val;
     }
-    printf("%.2lf %.2lf %d\n",eval(root, child,0), child->reward, child->games);//printPlay(root->lst_plays[i]);
+    //printf("%.2lf %.2lf %d\n",eval(root, child,0.7), child->reward, child->games);//printPlay(root->lst_plays[i]);
   }
 
   board->best_play = root->lst_plays[best_i];
@@ -131,8 +143,6 @@ int MCTS::select_child(Node* node){
       v.push_back(i);
     }
     else if(val==best_value) v.push_back(i);
-
-    //printf("%.2lf %.2lf %d\n",val, child->reward, child->games);//printPlay(root->lst_plays[i]);
   }
   std::random_shuffle(v.begin(),v.end());
   return v[0];
@@ -167,6 +177,8 @@ int MCTS::simulate(Board *board, bool player1, int depth, Node *child){
       child->terminal = true;
       child->res = k;
     }
+    //if(k==-1) return depth-depth_max;
+    //if(k==1)  return depth_max-depth;
     return k;
   }
   if(!depth) return 0;
@@ -186,14 +198,17 @@ void MCTS::backpropagate_aux(Node *node, double val, bool player){
   if(!node) return;
 
   if(node->next_player==player) node->reward+=val;
-  node->games+=1;
+
+  //if(val) node->games+=val;
+  node->games++;
 
   backpropagate_aux(node->parent,val, player);
 }
 
 void MCTS::backpropagate(Node *node, int res){
   if((node->next_player && res>0) || (!node->next_player && res<0)){
-    backpropagate_aux(node, 1.0, node->next_player);
+    //if(res<0) backpropagate_aux(node, -res, node->next_player);
+    backpropagate_aux(node, 1, node->next_player);
   }
   else if((node->next_player && res<0) || (!node->next_player && res>0)){
     backpropagate_aux(node, 0, node->next_player);

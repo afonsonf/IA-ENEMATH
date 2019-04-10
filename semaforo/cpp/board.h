@@ -3,24 +3,38 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <utility>
+#include <stdlib.h>
+#include <vector>
+#include <list>
+#include <stack>
 
+#include "play.h"
 #include "eval.h"
-#include "common.h"
 
 class Board{
 public:
-	int board[3][4];
-	Pos last_play;
-	Pos best_play;
+	std::stack<Play> playsStack;
+
+	Play best_play;
 	int depth;
-	
+
+	int board[3][4];
+
 	Board();
-	
-	bool play(Pos p);
-	bool rmplay(Pos p);
-	
-    bool final_board();
+	void init();
+	Board* dup();
+
+	void play(Play p);
+	void rmplay();
+
+	std::vector<Play> getPlays(bool player);
+
+	bool final_board();
+
+	int whoWins(bool next_player);
+	bool isDraw();
+	bool gameOver(bool next_player);
+
 	int eval_board();
 
 	void print_board();

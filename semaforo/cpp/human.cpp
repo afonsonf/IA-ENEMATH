@@ -40,11 +40,6 @@ void Human::search(){
   board->best_play = lst_plays[index-1];
 }
 
-void Human::printPlay(Play p){
-  printf("(%d, %d)", p.piece.i, p.piece.j);
-  for(int code: p.codes) printf(" %d",code);
-}
-
 void Human::printIndex(){
   printf("Code 0 - step right up\n");
   printf("Code 1 - step right down\n");

@@ -88,9 +88,6 @@ Board* Board::dup(){
   for(int i=0;i<8;i++) for(int j=0;j<8;j++) res->board[i][j] = board[i][j];
   res->numberPieces = numberPieces;
 
-  //i feel is not necessary:
-  //copy stsack
-
   return res;
 }
 
@@ -130,7 +127,7 @@ bool Board::validMove(Pos p, int code){
   return true;
 }
 
-//play piece of player in column
+//play piece of player
 Pos Board::play_aux(Pos p, int code){
   if(!validMove(p,code)){
     print_board(); exit(1);
@@ -267,8 +264,13 @@ void Board::play(Play p){
   for(int code: p.codes){
     piece = play_aux(piece,code);
   }
+  playsStack.push(p);
 }
-void Board::rmplay(Play p){
+
+void Board::rmplay(){
+  Play p = playsStack.top();
+  playsStack.pop();
+
   for(int i=0;i<(int)p.codes.size();i++)rmplay_aux();
 }
 
@@ -327,6 +329,25 @@ std::vector<Pos> Board::getMovablePieces (bool player1){
         if(sign(board[i][j]) == (player1 ? 1 : -1) && canStep(px))
         res.push_back(px);
       }
+    }
+  }
+
+  return res;
+}
+
+std::vector<Play> Board::getPlays(bool player){
+  std::vector<Play> res;
+  std::vector<Pos> pieces = getMovablePieces(player);
+  std::vector<std::list<int> > moves;
+
+  Play play;
+  for(Pos p : pieces){
+    moves = getMoves(p);
+    for(std::list<int> codes: moves){
+      play.piece = p;
+      play.codes = codes;
+
+      res.push_back(play);
     }
   }
 
@@ -468,25 +489,6 @@ std::vector<std::list<int> > Board::getMoves(Pos p){
 
   if(canStep(p))
   return getStepMoves(p);
-}
-
-std::vector<Play> Board::getPlays(bool player1){
-  std::vector<Play> res;
-  std::vector<Pos> pieces = getMovablePieces(player1);
-  std::vector<std::list<int> > moves;
-
-  Play play;
-  for(Pos p : pieces){
-    moves = getMoves(p);
-    for(std::list<int> codes: moves){
-      play.piece = p;
-      play.codes = codes;
-
-      res.push_back(play);
-    }
-  }
-
-  return res;
 }
 
 int Board::eval_board_1(){

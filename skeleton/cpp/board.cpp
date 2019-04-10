@@ -9,7 +9,7 @@ Board::Board(){
 Board* Board::dup(){
   Board *dup = new Board();
 
-  //copy data
+  //copy ONLY board, stack of plays not needed
 
   return dup;
 }
@@ -60,5 +60,5 @@ int Board::eval_board(){
 
 //print board pretty
 void Board::print_board(){
-  
+
 }

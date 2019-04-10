@@ -5,7 +5,7 @@
 #include <math.h>
 #include <algorithm>
 
-#include "common.h"
+#include "play.h"
 #include "board.h"
 
 struct Node{
@@ -13,7 +13,11 @@ struct Node{
 
   bool next_player;
   int games;
-  int wins;
+  double reward;
+
+  int nexpanded;
+  bool terminal;
+  int res;
 
   Board *board;
 
@@ -26,7 +30,11 @@ struct Node{
 
     this->next_player = player;
     this->games = 0;
-    this->wins = 0;
+    this->reward = 0;
+
+    this->nexpanded = 0;
+    this->terminal = false;
+    this->res = 0;
   }
 
   bool has_childs(){
@@ -58,33 +66,13 @@ public:
   void search();
   void play(Play p);
 
-  double eval(Node *node, int tot);
+  double eval(Node *parent, Node *node, double EXPLOR_PARAM);
   int select_child(Node* node);
   Node* select(Node* node);
   void expand(Node* node);
-  int simulate(Board *board, bool player1, int depth_max);
+  int simulate(Board *board, bool player1, int depth, Node *child);
   void backpropagate(Node *node, int res);
-  void backpropagate_aux(Node *node, int win,int draw, bool player);
+  void backpropagate_aux(Node *node, double val, bool player);
 
 };
-/*
-static void print_tabs(int x){
-  for(int i=0;i<x;i++) printf("  ");
-}
-
-static void print_tree(Node *n, int tabs){
-  return;
-  if(tabs > 1)return;
-
-  if(!n->has_childs()){
-    print_tabs(tabs);
-    printf("(----):\n");
-    return;
-  }
-  print_tabs(tabs);
-  if(n->parent) printf("(%.3lf,%d):\n",MCTS::eval(n,n->parent->games),(int)n->games);
-  else printf("(--,%d):\n",(int)n->games);
-  for(Node *a: n->lst_childs) print_tree(a,tabs+1);
-}
-*/
 #endif //MCTS_H

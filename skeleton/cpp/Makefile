@@ -6,11 +6,11 @@ CC=g++
 CFLAGS= -std=c++11
 
 # Source files
-SRC =               \
-	main.cpp	\
-  board.cpp  \
+SRC =         \
+	main.cpp	  \
+  board.cpp   \
 	minimax.cpp \
-	mcts.cpp 	\
+	mcts.cpp 	  \
 	human.cpp
 
 OBJ =  ${SRC:.cpp=.o}

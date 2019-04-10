@@ -3,11 +3,12 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <utility>
+#include <stdlib.h>
 #include <vector>
 #include <list>
 #include <stack>
 
+#include "play.h"
 #include "common.h"
 
 class Board{
@@ -16,9 +17,9 @@ public:
 	int numberPieces;
 
 	std::stack<Move> movesStack;
+	std::stack<Play> playsStack;
 
 	Play best_play;
-
 	int depth;
 
 	Board();
@@ -30,7 +31,7 @@ public:
 	void rmplay_aux();
 
 	void play(Play p);
-	void rmplay(Play p);
+	void rmplay();
 
   bool inBounds(Pos p);
   bool open(Pos p);
@@ -41,6 +42,8 @@ public:
 
 	std::vector<Pos> getMovablePieces (bool player1);
 
+	std::vector<Play> getPlays(bool player);
+
 	int whoWins(bool next_player);
 	bool isDraw();
 	bool gameOver(bool next_player);
@@ -48,8 +51,6 @@ public:
 	std::vector<std::list<int> > getJumpMoves(Pos p);
 	std::vector<std::list<int> > getStepMoves(Pos p);
 	std::vector<std::list<int> > getMoves(Pos p);
-
-	std::vector<Play> getPlays(bool player1);
 
 	int eval_board(int op = 1);
 	int eval_board_1();
