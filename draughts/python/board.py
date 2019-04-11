@@ -152,9 +152,9 @@ class Board:
         self.movesStack.pop()
 
         value = self.board[mv.last_pos.i][mv.last_pos.j]
-        # self.printBoard()
         self.board[mv.last_pos.i][mv.last_pos.j] = 0
-        # self.printBoard()
+
+        if mv.last_up: value /= valueOfKing
 
         if mv.last_code == 0:
             mv.last_pos.i+=1; mv.last_pos.j-=1

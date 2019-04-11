@@ -1,6 +1,8 @@
 from __future__ import print_function
 import sys
 
+from play import *
+
 class Human:
     __slots__ = ['first_player','board','player']
 
@@ -26,19 +28,23 @@ class Human:
         self.board.printBoard()
 
         for i in xrange(0,sz):
-            print("{}:",end = '').format(i)
+            print("{}:".format(i),end = '')
             printPlay(plays[i])
         print("")
 
         while True:
             print("Choose a move: ",end = "")
             sys.stdout.flush()
-            index = int(raw_input())
+            index = -1
+            try:
+                index = int(raw_input())
+            except ValueError:
+                print("Invalid move"); continue
 
-            if not self.inRange(index, 0, sz-1): print("Invalid moce")
+            if not self.inRange(index, 0, sz-1): print("Invalid move")
             else: break
 
-        board.best_play = plays[index]
+        self.board.best_play = plays[index]
         return
 
     def inRange(self, x, i, j):

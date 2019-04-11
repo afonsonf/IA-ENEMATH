@@ -14,7 +14,7 @@ class Minimax:
 
     def init(self, board):
         self.board = board
-        slef.player = self.first_player
+        self.player = self.first_player
         return
 
     def play(self, p):
@@ -39,7 +39,7 @@ class Minimax:
             if self.board.whoWins(True): return -10000
             return 0
 
-        if self.board.depth >= self.depth_max: return self.board.eval_board()
+        if self.board.depth >= self.depth: return self.board.eval_board()
 
         val = -10000000
         valx = 0
@@ -53,7 +53,7 @@ class Minimax:
 
             self.board.play(p)
             self.board.depth += 1
-            valx = min_value(alfa, beta)
+            valx = self.min_value(alfa, beta)
             self.board.depth -= 1
             self.board.rmplay()
 
@@ -71,7 +71,7 @@ class Minimax:
             if self.board.whoWins(False): return 10000
             return 0
 
-        if self.board.depth >= self.depth_max: return self.board.eval_board()
+        if self.board.depth >= self.depth: return self.board.eval_board()
 
         val = 10000000
         valx = 0
@@ -85,7 +85,7 @@ class Minimax:
 
             self.board.play(p)
             self.board.depth += 1
-            valx = max_value(alfa, beta)
+            valx = self.max_value(alfa, beta)
             self.board.depth -= 1
             self.board.rmplay()
 

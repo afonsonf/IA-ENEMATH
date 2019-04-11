@@ -7,27 +7,26 @@ from human import *
 # from mcts import *
 from minimax import *
 
-SEE = True
+SEE = False
 depth_max = 120
 
 board = 0
-first_player = True
+first_player = False
 
 ####################################################
 
 # p1 = MCTS(50000, first_player);
 # p2 = MCTS(10000, first_player);
 
-p1 = Minimax(10,first_player);
-p2 = Minimax(4,first_player);
+p1 = Minimax(6,first_player);
+p2 = Minimax(2,first_player);
 
 # p1 = Human(first_player);
 # p2 = Human(first_player);
 
 ####################################################
 
-player = True
-ngames = 1
+ngames = 100
 w = 0
 d = 0
 l = 0
@@ -49,10 +48,10 @@ while ngames > 0:
             win = board.whoWins(player)
             if win == -1:
                 l += 1
-                print("False wins ({:2d}::{:2d}::{:2d})".format(w,d,l))
+                print("False wins ({:2d}::{:2d}::{:2d}) {}".format(w,d,l,plays))
             elif win == 1:
                 w += 1
-                print("True wins  ({:2d}::{:2d}::{:2d})".format(w,d,l))
+                print("True wins  ({:2d}::{:2d}::{:2d}) {}".format(w,d,l,plays))
             else:
                 d += 1
                 print("draw       ({:2d}::{:2d}::{:2d})".format(w,d,l))

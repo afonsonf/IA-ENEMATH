@@ -4,6 +4,7 @@ class Board:
 
     def __init__(self):
         self.playsStack = []
+        self.movesStack = []
         self.depth = 0
 
         #initialize board
@@ -19,13 +20,13 @@ class Board:
 
         return board
 
-
     def play(self, p):
-        self.playsStack.push(p)
+        self.playsStack.append(p.dup())
 
         #play p in board
 
         return
+
 
     def rmplay(self):
         p = self.playsStack[len(self.playsStack)-1]
@@ -37,7 +38,6 @@ class Board:
 
     def getPlays(self, player):
         res = []
-
         #add playable plays to res
 
         return res
@@ -59,9 +59,9 @@ class Board:
         return False
 
     def eval_board(self):
+        value = 0
 
-        return 0
+        return value
 
     def printBoard(self):
-
         return

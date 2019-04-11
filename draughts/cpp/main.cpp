@@ -5,7 +5,7 @@
 #include "mcts.h"
 #include "human.h"
 
-#define SEE true
+#define SEE false
 
 int main(){
   Board *board;
@@ -16,8 +16,8 @@ int main(){
   // MCTS *p1 = new MCTS(100000, first_player);
   //MCTS *p2 = new MCTS(10000, first_player);
 
-  Minimax *p1 = new Minimax(4,first_player, 1);
-  Minimax *p2 = new Minimax(10,first_player, 1);
+  Minimax *p1 = new Minimax(6,first_player, 1);
+  Minimax *p2 = new Minimax(2,first_player, 1);
 
   //Human *p1 = new Human(first_player);
   //Human *p2 = new Human(first_player);
@@ -26,7 +26,7 @@ int main(){
 
   bool player;
 
-  int k=1,w=0,d=0,l=0,plays,win;
+  int k=200,w=0,d=0,l=0,plays,win;
   while(k--){
     //if(board) delete(board);
     board = new Board();

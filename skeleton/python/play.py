@@ -2,12 +2,11 @@ class Play:
     __slots__ = []
 
     def __eq__(self, other):
+        return True
 
-        return False
+    def dup(self):
+        p = Play()
+        return p
 
 def printPlay(p):
-
-    print("")
     return
-
-    

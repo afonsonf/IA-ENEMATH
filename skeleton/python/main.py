@@ -1,30 +1,33 @@
+from __future__ import print_function
+
 from board import *
+from play  import *
 
 from human import *
-# from mcts import *
-# from minimax import *
+from mcts import *
+from minimax import *
 
-SEE = False
+SEE = True
 depth_max = 120
 
 board = 0
-first_player = False
+first_player = True
 
 ####################################################
 
 # p1 = MCTS(50000, first_player);
 # p2 = MCTS(10000, first_player);
-#
-# p1 = Minimax(4,first_player);
-# p2 = Minimax(4,first_player);
 
-p1 = Human(first_player);
-p2 = Human(first_player);
+p1 = Minimax(10,first_player);
+p2 = Minimax(4,first_player);
+
+# p1 = Human(first_player);
+# p2 = Human(first_player);
 
 ####################################################
 
 player = True
-ngames = 200
+ngames = 1
 w = 0
 d = 0
 l = 0
@@ -46,18 +49,18 @@ while ngames > 0:
             win = board.whoWins(player)
             if win == -1:
                 l += 1
-                print("False wins ({:2d}::{:2d}::{:2d})").format(w,d,l)
+                print("False wins ({:2d}::{:2d}::{:2d})".format(w,d,l))
             elif win == 1:
                 w += 1
-                print("True wins  ({:2d}::{:2d}::{:2d})").format(w,d,l)
+                print("True wins  ({:2d}::{:2d}::{:2d})".format(w,d,l))
             else:
                 d += 1
-                print("draw       ({:2d}::{:2d}::{:2d})").format(w,d,l)
+                print("draw       ({:2d}::{:2d}::{:2d})".format(w,d,l))
             break
 
         if plays > depth_max:
             d += 1
-            print("draw       ({:2d}::{:2d}::{:2d})").format(w,d,l)
+            print("draw       ({:2d}::{:2d}::{:2d})".format(w,d,l))
             break
 
         if player: p1.search()
@@ -77,4 +80,4 @@ while ngames > 0:
         plays += 1
     #del board
 
-print("w: {}\nd: {}\nl: {}").format(w,d,l)
+print("w: {}\nd: {}\nl: {}".format(w,d,l))
