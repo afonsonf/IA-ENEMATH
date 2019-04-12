@@ -8,11 +8,9 @@ class Play:
 
     def __eq__(self, other):
         if not self.piece == other.piece: return False
-        if not len(self.codes) == len(other.codes): return False
+        if not (len(self.codes) == len(other.codes)): return False
 
-        for (a,b) in (self.codes, other.codes):
-            if not a==b: return False
-        return True
+        return self.codes == other.codes
 
     def dup(self):
         p = Play()

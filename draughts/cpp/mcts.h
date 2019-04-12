@@ -53,7 +53,7 @@ static void clean(Node *node){
 
 class MCTS{
 public:
-  int time_limit;
+  int ngames;
   bool first_player;
 
   Node* root;

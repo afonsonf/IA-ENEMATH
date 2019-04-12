@@ -4,7 +4,7 @@ from board import *
 from play  import *
 
 from human import *
-# from mcts import *
+from mcts import *
 from minimax import *
 
 SEE = False
@@ -15,11 +15,11 @@ first_player = False
 
 ####################################################
 
-# p1 = MCTS(50000, first_player);
+p1 = MCTS(1000, first_player);
 # p2 = MCTS(10000, first_player);
 
-p1 = Minimax(6,first_player);
-p2 = Minimax(2,first_player);
+# p1 = Minimax(6,first_player);
+p2 = Minimax(4,first_player);
 
 # p1 = Human(first_player);
 # p2 = Human(first_player);

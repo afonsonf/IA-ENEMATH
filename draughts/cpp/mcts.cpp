@@ -3,10 +3,10 @@
 const double EXPLOR_PARAM = 1.3;//0.70710678118; //1.41421356237 //0.52026009502
 const int depth_max = 60;
 
-MCTS::MCTS(int NGAMES, bool first_player){
+MCTS::MCTS(int ngames, bool first_player){
   srand(42);
 
-  this->time_limit = NGAMES;
+  this->ngames = ngames;
   this->first_player = first_player;
 }
 
@@ -56,8 +56,8 @@ void MCTS::search(){
   int res;
 
   int jogos = 0;
-  while((clock() - start_time) < time_limit){
-  //while(jogos<50000){
+  while((clock() - start_time) < ngames){
+  // while(jogos<ngames){
     child = select(root);
     if(!child->terminal) expand(child);
 

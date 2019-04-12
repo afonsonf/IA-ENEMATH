@@ -57,7 +57,8 @@ class Board:
         board.depth = self.depth
 
         #copy board
-        dup.board = list(self.board)
+        for i in xrange(0,8):
+            for j in xrange(0,8): board.board[i][j] = self.board[i][j]
 
         return board
 

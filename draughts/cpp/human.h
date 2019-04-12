@@ -1,6 +1,9 @@
 #ifndef HUMAN_H
 #define HUMAN_H
 
+#include <stdio.h>
+#include <string.h>
+
 #include "board.h"
 #include "common.h"
 
@@ -16,6 +19,7 @@ public:
   void init(Board *board);
   void play(Play p);
 
+  int getInput(int sz);
   void search();
   void printIndex();
   bool inRange(int x, int i, int j);

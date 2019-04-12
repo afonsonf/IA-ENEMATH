@@ -25,7 +25,7 @@ struct Play{
 };
 
 static void printPlay(Play p){
-  printf("(%d, %d)", p.piece.i, p.piece.j);
+  printf("(%d, %d)", p.piece.j, p.piece.i);
   for(int code: p.codes) printf(" %d",code);
   printf("\n");
 }

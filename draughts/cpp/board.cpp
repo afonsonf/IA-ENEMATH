@@ -533,22 +533,24 @@ int Board::eval_board(int op /*=1*/){
 
 //print board pretty
 void Board::print_board(){
-  printf("|-"); for(int i=0;i<8;i++)printf("--"); printf("-|\n");
-  for(int i=0;i<8;i++){
-    printf("| ");
-    for(int j=0;j<8;j++){
+  printf(" | "); for(int i=0;i<8;i++)printf("%d ",i); printf("|\n");
+  printf(" | "); for(int i=0;i<8;i++)printf("--"); printf("|\n");
+  for(int j=7;j>=0;j--){
+    printf("%d| ",j);
+    for(int i=0;i<8;i++){
       switch(board[i][j]){
-        case -valueOfKing:{printf("B "); break;}
-        case -1:{printf("b "); break;}
+        case -valueOfKing:{printf("R "); break;}
+        case -1:{printf("r "); break;}
         case  0:{printf("_ "); break;}
-        case  1:{printf("r "); break;}
-        case valueOfKing:{printf("R "); break;}
+        case  1:{printf("b "); break;}
+        case valueOfKing:{printf("B "); break;}
 
         default:
         printf("Error board: (%d,%d) %d\n",i,j,board[i][j]); exit(1);
       }
     }
-    printf(" |\n");
+    printf("|%d\n",j);
   }
-  printf("|-"); for(int i=0;i<8;i++)printf("--"); printf("-|\n\n");
+  printf(" | "); for(int i=0;i<8;i++)printf("--"); printf("|\n");
+  printf(" | "); for(int i=0;i<8;i++)printf("%d ",i); printf("|\n\n");
 }

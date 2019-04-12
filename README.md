@@ -7,7 +7,8 @@ Implementation of minimax (with alphabeta prunning) and mcts in c++ and python f
 
 To use the implementation of the minimax and mcts its needed to implement the board.cpp with the at least the following mandatory methods:
 
-Minimax:
+in Board file: <br>
+
   vector<Plays> getPlays(bool player); <br>
   void play(Play p); <br>
   void rmPlay(Play p); <br>
@@ -18,6 +19,7 @@ Minimax:
 
   void draw(); <br>
 
-MCTS:
+in Play file: <br>
+
 
 Summary of the methods:
