@@ -5,21 +5,24 @@ Workshop ENEMath
 
 Implementation of minimax (with alphabeta prunning) and mcts in c++ and python for 2 player board games.
 
-To use the implementation of the minimax and mcts its needed to implement the board.cpp with the at least the following mandatory methods:
+To use the implementation in the skeleton folder of the minimax and mcts you need at least to implement the methods that are in board and play files :
 
-in Board file: <br>
+#### Play: <br>
+Where a play is defined. This struct needs to have all information needed to perform a play.
 
-  vector<Plays> getPlays(bool player); <br>
-  void play(Play p); <br>
-  void rmPlay(Play p); <br>
-  int eval_board(); <br>
+* <b> operator==() ||  \__eq__() </b> <br>
+overload of the method for testing equality of 2 plays.
 
-  bool gameOver(); someone win or draw <br>
-  bool whoWins(); 1 if true wins, -1 if false wins <br>
+* <b> printPlay(Play p) </b> <br>
+print an play in one line (for default Human player)
 
-  void draw(); <br>
+#### Board: <br>
+Where the board is defined.
 
-in Play file: <br>
+*  <b> constructor </b> <br>
+Initializes the board.
+
+*  <b> play(Play p) </b>
 
 
 Summary of the methods:
