@@ -1,8 +1,6 @@
 # IA-ENEMATH
 Workshop ENEMath
 
-[WIP]
-
 Implementation of minimax (with alphabeta prunning) and mcts in c++ and python for 2 player board games.
 
 To use the implementation in the skeleton folder of the minimax and mcts you need at least to implement the methods that are in board and play files :
@@ -22,7 +20,31 @@ Where the board is defined.
 *  <b> constructor </b> <br>
 Initializes the board.
 
-*  <b> play(Play p) </b>
+*  <b> dup() </b> <br>
+Return a copy of board.
 
+* <b> play(Play p) </b> <br>
+Do the play p.
 
-Summary of the methods:
+* <b> rmplay(Play p)</b> <br>
+Undo the play p.
+
+* <b> getPlays(player) </b> <br>
+Returns a vector/list of possible plays for player.
+
+* <b> whoWins(next_player)</b> <br>
+If next player wins and (next_player == True) returns 1. <br>
+If next player wins and (next_player == False) returns -1. <br>
+Else return 0.
+
+* <b> isDraw() </b> <br>
+Return True if is draw.
+
+* <b> gameOver(next_player) </b> <br>
+Returns true if game is over.
+
+* <b> eval_board() </b> <br>
+Returns the value of board, (positive if in favor of True player).
+
+* <b> print_board() </b> <br>
+Prints the board pretty.
