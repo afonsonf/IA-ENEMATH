@@ -3,6 +3,9 @@ from board import *
 
 import random
 
+MINUS_INF = -10000000
+PLUS_INF  =  10000000
+
 class Minimax:
     __slots__ = ['depth', 'first_player', 'board', 'player']
 
@@ -25,8 +28,8 @@ class Minimax:
         plays = self.board.getPlays(self.player)
         self.board.best_play = plays[0]
 
-        alfa = -10000000
-        beta =  10000000
+        alfa = MINUS_INF
+        beta = PLUS_INF
 
         if self.player:
             self.max_value(alfa, beta)
@@ -41,7 +44,7 @@ class Minimax:
 
         if self.board.depth >= self.depth: return self.board.eval_board()
 
-        val = -10000000
+        val = MINUS_INF
         valx = 0
         podar = False
 
@@ -73,7 +76,7 @@ class Minimax:
 
         if self.board.depth >= self.depth: return self.board.eval_board()
 
-        val = 10000000
+        val = PLUS_INF
         valx = 0
         podar = False
 

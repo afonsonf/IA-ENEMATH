@@ -4,6 +4,8 @@ import sys
 
 EXPLOR_PARAM = 1.3
 depth_mcts = 60
+MINUS_INF = -10000000
+PLUS_INF  =  10000000
 
 class Node:
     __slots__ = ['parent', 'next_player', 'games', 'reward', 'nexpanded', 'terminal', 'res', 'board', 'lst_plays', 'lst_childs']
@@ -78,7 +80,7 @@ class MCTS:
             jogos += 1
 
         best_i = 0
-        best_value = -100000
+        best_value = MINUS_INF
         sz = len(self.root.lst_plays)
 
         for i in xrange(0,sz):
@@ -108,7 +110,7 @@ class MCTS:
             node.nexpanded += 1
             return v[0]
 
-        best_val = -100000
+        best_val = MINUS_INF
         for i in xrange(0,sz):
             child = node.lst_childs[i]
 
