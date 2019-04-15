@@ -64,9 +64,9 @@ class MCTS:
         return
 
     def search(self):
-        jogos = 0
+        games = 0
 
-        while jogos < self.ngames:
+        while games < self.ngames:
             child = self.select(self.root)
             if not child.terminal: self.expand(child)
 
@@ -77,7 +77,7 @@ class MCTS:
 
             self.backpropagate(child, res)
             #clean dup
-            jogos += 1
+            games += 1
 
         best_i = 0
         best_value = MINUS_INF
